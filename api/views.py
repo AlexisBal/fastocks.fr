@@ -10,22 +10,32 @@ from .serializers import *
 
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def profiles_list(request):
-    # Voir les utilisateurs
-    data = []
-    profiles = Profile.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(profiles, 10)
-    try:
-        data = paginator.page(page)
-    except PageNotAnInteger:
-        data = paginator.page(1)
-    except EmptyPage:
-        data = paginator.page(paginator.num_pages)
+    if request.method == 'GET':
+        # Voir les utilisateurs
+        data = []
+        profiles = Profile.objects.all()
+        page = request.GET.get('page', 1)
+        paginator = Paginator(profiles, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
 
-    serializer = ProfilesSerializer(data,context={'request': request}, many=True)
-    return Response({'data': serializer.data})
+        serializer = ProfilesSerializer(data,context={'request': request}, many=True)
+        return Response({'data': serializer.data})
+    # Créer un utilisateur
+    elif request.method == 'POST':
+       serializer = ProfileSerializer(data=request.data)
+       if serializer.is_valid():
+           user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], phone=request.data["phone"], password=request.data["password"])
+           user.set_password(request.data["password"])
+           user.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

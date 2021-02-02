@@ -22,6 +22,20 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'createdAt'
        )
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = (
+            'gender', 
+            'birth_date',
+            'first_name',
+            'last_name',
+            'phone',
+            'email',
+            'password'
+    )
+
+
 
 class MonitoringsSerializer(serializers.ModelSerializer):
    class Meta:
