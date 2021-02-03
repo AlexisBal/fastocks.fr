@@ -67,6 +67,39 @@ def login(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+def user_account(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        serializer = ProfilesSerializer(profile,context={'request': request})
+        id_1 = int(serializer.data['id_user'])
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def user_account_delete(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        serializer = ProfilesSerializer(profile,context={'request': request})
+        id_1 = int(serializer.data['id_user'])
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            profile.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 #@protected_resource()
 def user_account_delete(request):

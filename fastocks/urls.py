@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^api/login', views.login),
     url(r'^api/profiles/$', views.profiles_list),
     url(r'^api/profiles/(?P<pk>[0-999999999999999999999]+)$', views.profile_detail),  
+    url(r'^api/user-account', views.user_account),  
     url(r'^api/user-account/delete', views.user_account_delete),  
     url(r'^api/monitoring/$', views.monitoring_list),
     url(r'^api/monitoring/(?P<pk>[0-999999999999999999999]+)$', views.monitoring_detail),  
