@@ -25,7 +25,7 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'createdAt'
        )
 
-class ProfileSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = (
@@ -33,6 +33,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             'birth_date',
             'first_name',
             'last_name',
+            'email',
+            'password'
+    )
+
+class LoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = (
             'email',
             'password'
     )

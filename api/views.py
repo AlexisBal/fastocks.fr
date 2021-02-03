@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from oauth2_provider.decorators import protected_resource
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import redirect, render, HttpResponse
@@ -9,8 +11,8 @@ from .models import *
 from .serializers import *
 
 
-
 @api_view(['GET'])
+
 def profiles_list(request):
     # Voir les utilisateurs
     data = []
@@ -28,17 +30,36 @@ def profiles_list(request):
     return Response({'data': serializer.data})
     
 
-
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def register(request):
-    serializer = ProfileSerializer(data=request.data)
-    if serializer.is_valid():
-        user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], phone=request.data["phone"], password=request.data["password"])
-        user.set_password(request.data["password"])
-        user.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'GET':
+        serializer = RegisterSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == 'POST':
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], password=request.data["password"])
+            user.set_password(request.data["password"])
+            user.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST', 'GET'])
+def login(request):
+    if request.method == 'GET':
+        serializer = LoginSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == 'POST':
+        user = django_authenticate(email=request.data['email'], password=request.data['password'])
+        if user is not None:
+            pk = user.pk
+            profile = Profile.objects.get(pk=pk)
+            serializer = ProfilesSerializer(profile,context={'request': request})
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+      
 
 @api_view(['GET', 'POST'])
 def monitoring_list(request):
@@ -92,8 +113,8 @@ def products_list(request):
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET', 'PUT', 'DELETE'])
+@protected_resource()
 def profile_detail(request, pk):
    # Retrouver, modifier ou supprimer un utilisateur par id/pk
    try:
@@ -103,6 +124,7 @@ def profile_detail(request, pk):
 
    if request.method == 'GET':
        serializer = ProfilesSerializer(profile,context={'request': request})
+       print(profile)
        return Response(serializer.data)
 
    elif request.method == 'PUT':
@@ -117,10 +139,9 @@ def profile_detail(request, pk):
        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 @api_view(['GET', 'PUT', 'DELETE'])
 def monitoring_detail(request, pk):
-   # Retrouver, modifier ou supprimer un utilisateur par id/pk
+   # Retrouver, modifier ou supprimer un suivi par id/pk
    try:
        monitoring = Monitoring.objects.get(pk=pk)
    except Monitoring.DoesNotExist:
@@ -142,10 +163,9 @@ def monitoring_detail(request, pk):
        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 @api_view(['GET', 'PUT', 'DELETE'])
 def product_detail(request, pk):
-   # Retrouver, modifier ou supprimer un utilisateur par id/pk
+   # Retrouver, modifier ou supprimer un produit par id/pk
    try:
        product = Products.objects.get(pk=pk)
    except Products.DoesNotExist:
