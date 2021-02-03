@@ -12,7 +12,7 @@ from .serializers import *
 
 
 @api_view(['GET'])
-
+@protected_resource()
 def profiles_list(request):
     # Voir les utilisateurs
     data = []
@@ -62,6 +62,7 @@ def login(request):
       
 
 @api_view(['GET', 'POST'])
+@protected_resource()
 def monitoring_list(request):
     # Voir les suivis 
     if request.method == 'GET':
@@ -88,6 +89,7 @@ def monitoring_list(request):
 
 
 @api_view(['GET', 'POST'])
+@protected_resource()
 def products_list(request):
     # Voir les produits
     if request.method == 'GET':
@@ -140,6 +142,7 @@ def profile_detail(request, pk):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@protected_resource()
 def monitoring_detail(request, pk):
    # Retrouver, modifier ou supprimer un suivi par id/pk
    try:
@@ -164,6 +167,7 @@ def monitoring_detail(request, pk):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@protected_resource()
 def product_detail(request, pk):
    # Retrouver, modifier ou supprimer un produit par id/pk
    try:
