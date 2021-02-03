@@ -27,10 +27,10 @@ urlpatterns = [
     url(r'^api/profiles/(?P<pk>[0-999999999999999999999]+)$', views.profile_detail),  
     url(r'^api/user-account/$', views.user_account),  
     url(r'^api/user-account/settings', views.user_account_settings),  
-    url(r'^api/user-account/password', views.user_account_settings),  
+    url(r'^api/user-account/password', views.user_account_password),  
     url(r'^api/user-account/delete', views.user_account_delete),  
     url(r'^api/monitoring/$', views.monitoring_list),
     url(r'^api/monitoring/(?P<pk>[0-999999999999999999999]+)$', views.monitoring_detail),  
-    url(r'^api/products/$', views.products_list),   
+    url(r'^api/products/$', views.products_list),    
     url(r'^api/products/(?P<pk>[0-999999999999999999999]+)$', views.product_detail),  
 ]

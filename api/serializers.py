@@ -46,18 +46,6 @@ class LoginSerializer(serializers.ModelSerializer):
     )
 
 
-class ProfileSettingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = (
-            'phone',
-            'alert_stock',
-            'alert_price',
-            'alert_sms',
-            'alert_email',
-    )
-
-
 
 class MonitoringsSerializer(serializers.ModelSerializer):
    class Meta:

@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from oauth2_provider.decorators import protected_resource
 from rest_framework.decorators import api_view
 from rest_framework import status
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -92,6 +93,7 @@ def user_account_settings(request):
         data['password'] = profile.password
         id_1 = int(profile.id_user)
         id_2 = int(request.META['HTTP_USER_ID'])
+        
         if id_1 == id_2:
             serializer = ProfilesSerializer(profile, data=request.data, context={'request': request})
             if serializer.is_valid():
@@ -99,7 +101,7 @@ def user_account_settings(request):
                 return Response(serializer.data)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
        
     except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -111,14 +113,17 @@ def user_account_password(request):
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
         id_1 = int(profile.id_user)
         id_2 = int(request.META['HTTP_USER_ID'])
-        if id_1 == id_2:
-            serializer = ProfilesSerializer(profile, data=request.data, context={'request': request})
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
+        validator = check_password(request.data['old-password'], profile.password)
+        if id_1 == id_2 and validator == True:
+            password = request.data['password']
+            password_confirm = request.data['password-confirm']
+            if password == password_confirm:
+                profile.set_password(password)
+                profile.save()
+                return Response(status=status.HTTP_204_NO_CONTENT)            
             else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
        
     except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
