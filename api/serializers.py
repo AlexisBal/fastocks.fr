@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import *
 
 
@@ -17,6 +16,10 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'phone',
            'email',
            'password',
+           'alert_stock',
+           'alert_price',
+           'alert_sms',
+           'alert_email',
            'last_login',
            'active',
            'createdAt'
@@ -30,9 +33,20 @@ class ProfileSerializer(serializers.ModelSerializer):
             'birth_date',
             'first_name',
             'last_name',
-            'phone',
             'email',
             'password'
+    )
+
+
+class ProfileSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = (
+            'phone',
+            'alert_stock',
+            'alert_price',
+            'alert_sms',
+            'alert_email',
     )
 
 

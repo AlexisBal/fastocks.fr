@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import BaseUserManager
+from django.db.models.fields import NullBooleanField
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -39,6 +40,11 @@ class UserManager(BaseUserManager):
             email,
             password=password,
         )
+        user.first_name = None 
+        user.last_name = None 
+        user.gender = None
+        user.phone = None
+        user.birth_date = None 
         user.staff = True
         user.superuser = True
         user.save(using=self._db)

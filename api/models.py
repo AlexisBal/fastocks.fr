@@ -8,12 +8,18 @@ from .managers import UserManager
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     id_user = models.AutoField(verbose_name="id user", primary_key=True, unique=True)
-    gender = models.CharField(verbose_name="gender", max_length=1)
+    gender = models.CharField(verbose_name="gender", max_length=1, null=True)
     birth_date = models.DateField(verbose_name="birth date", null=True)
-    first_name = models.CharField(verbose_name="first name", max_length=60)
-    last_name = models.CharField(verbose_name="last name", max_length=60)
-    phone = models.CharField(verbose_name="phone", max_length=20, unique=True)
+    first_name = models.CharField(verbose_name="first name", max_length=60, null=True)
+    last_name = models.CharField(verbose_name="last name", max_length=60, null=True)
+    phone = models.CharField(
+        verbose_name="phone", max_length=20, unique=True, null=True, default=None
+    )
     email = models.EmailField(verbose_name="email", max_length=255, unique=True)
+    alert_stock = models.BooleanField(default=True)
+    alert_price = models.BooleanField(default=True)
+    alert_sms = models.BooleanField(default=False)
+    alert_email = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     superuser = models.BooleanField(default=False)  # a superuser
