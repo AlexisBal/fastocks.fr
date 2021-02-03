@@ -20,10 +20,10 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/profile/$', views.profiles_list),
-    url(r'^api/profile/(?P<pk>[0-999999999999999999999]+)$', views.profile_detail),  
+    url(r'^api/profiles/$', views.profiles_list),
+    url(r'^api/profiles/(?P<pk>[0-999999999999999999999]+)$', views.profile_detail),  
     url(r'^api/monitoring/$', views.monitoring_list),
     url(r'^api/monitoring/(?P<pk>[0-999999999999999999999]+)$', views.monitoring_detail),  
-    url(r'^api/product/$', views.products_list),   
-    url(r'^api/product/(?P<pk>[0-999999999999999999999]+)$', views.product_detail),  
+    url(r'^api/products/$', views.products_list),   
+    url(r'^api/products/(?P<pk>[0-999999999999999999999]+)$', views.product_detail),  
 ]
