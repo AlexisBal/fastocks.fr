@@ -23,6 +23,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     superuser = models.BooleanField(default=False)  # a superuser
+    token = models.CharField(verbose_name="token", max_length=255, unique=True, default=None,  null=True)
     createdAt = models.DateTimeField("Created At", auto_now_add=True)
 
     USERNAME_FIELD = "email"

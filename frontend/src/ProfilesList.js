@@ -1,14 +1,14 @@
 import  React, { Component } from  'react';
-import ClientsService from  './ClientsService'
+import ProfilesService from  './ProfilesService'
 
-const clientsService = new ClientsService();
+const profilesService = new ProfilesService();
 
-class ClientsList extends Component {
+class ProfilesList extends Component {
 
    constructor(props) {
        super(props);
        this.state  = {
-           clients: [],
+           profiles: [],
            nextPageURL:  ''
        };
        this.nextPage = this.nextPage.bind(this);
@@ -17,32 +17,32 @@ class ClientsList extends Component {
 
    componentDidMount() {
         var self = this;
-        clientsService.getClients().then(function(result) {
-            self.setState({ clients: result.data, nextPageURL: result.nextlink})
+        profilesService.getProfiles().then(function(result) {
+            self.setState({ profiles: result.data, nextPageURL: result.nextlink})
         });
     }
 
     handleDelete(e,pk){
         var  self = this;
-        clientsService.deleteClient({pk :  pk}).then(()=>{
-            var  newArr = self.state.clients.filter(function(obj) {
+        profilesService.deleteProfile({pk :  pk}).then(()=>{
+            var  newArr = self.state.profiles.filter(function(obj) {
                 return obj.pk  !==  pk;
             });
-            self.setState({clients:  newArr})
+            self.setState({profiles:  newArr})
         });
     }
 
     nextPage(){
         var  self = this;
-        clientsService.getClientsByURL(this.state.nextPageURL).then((result) => {
-            self.setState({ clients:  result.data, nextPageURL:  result.nextlink})
+        profilesService.getProfilesByURL(this.state.nextPageURL).then((result) => {
+            self.setState({ profiles:  result.data, nextPageURL:  result.nextlink})
         });
     }
 
     render() {
 
         return (
-            <div  className="clients--list">
+            <div  className="profiles--list">
                 <table  className="table">
                     <thead  key="thead">
                     <tr>
@@ -57,7 +57,7 @@ class ClientsList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                        {this.state.clients.map( c  =>
+                        {this.state.profiles.map( c  =>
                         <tr  key={c.pk}>
                             <td>{c.pk}  </td>
                             <td>{c.first_name}</td>
@@ -68,7 +68,7 @@ class ClientsList extends Component {
                             <td>{c.description}</td>
                             <td>
                             <button  onClick={(e)=>  this.handleDelete(e,c.pk) }>Delete</button>
-                            <a  href={"/client/" + c.pk}> Update</a>
+                            <a  href={"/profile/" + c.pk}> Update</a>
                             </td>
                         </tr>)}
                     </tbody>
@@ -79,4 +79,4 @@ class ClientsList extends Component {
     }
 }
 
-export default ClientsList;
+export default ProfilesList;

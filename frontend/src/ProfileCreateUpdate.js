@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import ClientsService from './ClientsService';
+import ProfilesService from  './ProfilesService'
 
-const clientsService = new ClientsService();
+const profilesService = new ProfilesService();
 
-class ClientCreateUpdate extends Component {
+class ProfileCreateUpdate extends Component {
     constructor(props) {
         super(props);
     
@@ -16,7 +16,7 @@ class ClientCreateUpdate extends Component {
         const { match: { params } } = this.props;
         if(params && params.pk)
         {
-          clientsService.getClient(params.pk).then((c)=>{
+          profilesService.getProfile(params.pk).then((c)=>{
             this.refs.firstName.value = c.first_name;
             this.refs.lastName.value = c.last_name;
             this.refs.email.value = c.email;
@@ -28,7 +28,7 @@ class ClientCreateUpdate extends Component {
       }
 
       handleCreate(){
-        clientsService.createClient(
+        profilesService.createProfile(
           {
             "first_name": this.refs.firstName.value,
             "last_name": this.refs.lastName.value,
@@ -38,13 +38,13 @@ class ClientCreateUpdate extends Component {
             "description": this.refs.description.value
         }          
         ).then((result)=>{
-          alert("Client créé !");
+          alert("Profile créé !");
         }).catch(()=>{
           alert('There was an error! Please re-check your form.');
         });
       }
       handleUpdate(pk){
-        clientsService.updateClient(
+        profilesService.updateProfile(
           {
             "pk": pk,
             "first_name": this.refs.firstName.value,
@@ -56,7 +56,7 @@ class ClientCreateUpdate extends Component {
         }          
         ).then((result)=>{
           console.log(result);
-          alert("Client modifié!");
+          alert("Profile modifié!");
         }).catch(()=>{
           alert('There was an error! Please re-check your form.');
         });
@@ -111,4 +111,4 @@ class ClientCreateUpdate extends Component {
       }  
 }
 
-export default ClientCreateUpdate;
+export default ProfileCreateUpdate;

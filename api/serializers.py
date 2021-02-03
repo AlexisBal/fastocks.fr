@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import *
 
-
 class ProfilesSerializer(serializers.ModelSerializer):
    class Meta:
        model = Profile
@@ -22,7 +21,8 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'alert_email',
            'last_login',
            'active',
-           'createdAt'
+           'createdAt',
+           'token'
        )
 
 class RegisterSerializer(serializers.ModelSerializer):

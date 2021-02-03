@@ -1,6 +1,7 @@
 # accounts.forms.py
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from rest_framework.authtoken.models import Token
 
 from .models import Profile
 
@@ -44,7 +45,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('gender', 'birth_date', 'first_name', 'last_name', 'phone', 'email')
+        fields = ('gender', 'birth_date', 'first_name', 'last_name', 'phone', 'email', 'token')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -58,6 +59,10 @@ class UserAdminCreationForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super(UserAdminCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        user.save()
+        token, created = Token.objects.get_or_create(user=user) # Création d'un token unique
+        user.token = token.key
+        user.save()
         if commit:
             user.save()
         return user

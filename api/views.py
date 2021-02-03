@@ -1,22 +1,25 @@
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from oauth2_provider.decorators import protected_resource
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework.authtoken.models import Token
 
 from .models import *
 from .serializers import *
 
 
 @api_view(['GET'])
-@protected_resource()
+#@protected_resource()
 def profiles_list(request):
-    # Voir les utilisateurs
     data = []
     profiles = Profile.objects.all()
+    # Mise à jour de la base de données de Token
+    for profile in profiles:
+        token, created = Token.objects.get_or_create(user=profile)
+    # Voir les utilisateurs
     page = request.GET.get('page', 1)
     paginator = Paginator(profiles, 10)
     try:
@@ -41,6 +44,9 @@ def register(request):
             user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], password=request.data["password"])
             user.set_password(request.data["password"])
             user.save()
+            token, created = Token.objects.get_or_create(user=user) # Création d'un token unique
+            user.token = token.key
+            user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,10 +65,26 @@ def login(request):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-      
+
+
+@api_view(['POST'])
+#@protected_resource()
+def user_account_delete(request):
+    try:
+        profile = Profile.objects.get(token=request.data['token'])
+        serializer = ProfilesSerializer(profile,context={'request': request})
+        if serializer.data['id_user'] == request.data['id_user']:
+            profile.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
 @api_view(['GET', 'POST'])
-@protected_resource()
+#@protected_resource()
 def monitoring_list(request):
     # Voir les suivis 
     if request.method == 'GET':
@@ -89,7 +111,7 @@ def monitoring_list(request):
 
 
 @api_view(['GET', 'POST'])
-@protected_resource()
+#@protected_resource()
 def products_list(request):
     # Voir les produits
     if request.method == 'GET':
@@ -116,7 +138,7 @@ def products_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@protected_resource()
+#@protected_resource()
 def profile_detail(request, pk):
    # Retrouver, modifier ou supprimer un utilisateur par id/pk
    try:
@@ -126,7 +148,6 @@ def profile_detail(request, pk):
 
    if request.method == 'GET':
        serializer = ProfilesSerializer(profile,context={'request': request})
-       print(profile)
        return Response(serializer.data)
 
    elif request.method == 'PUT':
@@ -142,7 +163,7 @@ def profile_detail(request, pk):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@protected_resource()
+#@protected_resource()
 def monitoring_detail(request, pk):
    # Retrouver, modifier ou supprimer un suivi par id/pk
    try:
@@ -167,7 +188,7 @@ def monitoring_detail(request, pk):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@protected_resource()
+#@protected_resource()
 def product_detail(request, pk):
    # Retrouver, modifier ou supprimer un produit par id/pk
    try:

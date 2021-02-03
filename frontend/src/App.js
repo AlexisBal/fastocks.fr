@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 
-import  ClientsList from './ClientsList'
-import  ClientCreateUpdate  from './ClientCreateUpdate'
+import  ProfilesList from './ProfilesList'
+import  ProfileCreateUpdate  from './ProfileCreateUpdate'
 import './App.css';
 
 const BaseLayout = () => (
@@ -14,16 +14,16 @@ const BaseLayout = () => (
           <span className="navbar-toggler-icon"></span></button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-item nav-link" href="/">CLIENT</a>
-            <a className="nav-item nav-link" href="/client">CREER CLIENT</a>
+            <a className="nav-item nav-link" href="/">PROFILE</a>
+            <a className="nav-item nav-link" href="/profile">CREER UN PROFILE</a>
           </div>
         </div>
       </nav>  
 
       <div className="content">
-        <Route path="/" exact component={ClientsList} />
-        <Route path="/client/:pk" component={ClientCreateUpdate} />
-        <Route path="/client/" exact component={ClientCreateUpdate} />
+        <Route path="/" exact component={ProfilesList} />
+        <Route path="/profile/:pk" component={ProfileCreateUpdate} />
+        <Route path="/profile/" exact component={ProfileCreateUpdate} />
       </div>
 
   </div>
