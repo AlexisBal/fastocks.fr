@@ -83,6 +83,47 @@ def user_account(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['PUT'])
+def user_account_settings(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        data = request.data
+        data['email'] = profile.email
+        data['password'] = profile.password
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            serializer = ProfilesSerializer(profile, data=request.data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def user_account_password(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            serializer = ProfilesSerializer(profile, data=request.data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def user_account_delete(request):
     try:
@@ -99,23 +140,7 @@ def user_account_delete(request):
     except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-
-@api_view(['POST'])
-#@protected_resource()
-def user_account_delete(request):
-    try:
-        profile = Profile.objects.get(token=request.data['token'])
-        serializer = ProfilesSerializer(profile,context={'request': request})
-        if serializer.data['id_user'] == request.data['id_user']:
-            profile.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
     
-    except Profile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-
 @api_view(['GET', 'POST'])
 #@protected_resource()
 def monitoring_list(request):
