@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^api/user-account/delete', views.user_account_delete),  
     url(r'^api/user-account-monitoring/$', views.user_account_monitoring),  
     url(r'^api/user-account-monitoring/(?P<pk>[0-999999999999999999999]+)$', views.user_account_monitoring_detail),  
+    url(r'^api/user-account-monitoring/products/$', views.user_account_monitoring_products), 
+    url(r'^api/user-account-monitoring/products/(?P<pk>[0-999999999999999999999]+)$', views.user_account_monitoring_product), 
     url(r'^api/monitoring/$', views.monitoring_list),
     url(r'^api/monitoring/(?P<pk>[0-999999999999999999999]+)$', views.monitoring_detail),  
     url(r'^api/products/$', views.products_list),   

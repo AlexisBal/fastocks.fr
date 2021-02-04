@@ -189,15 +189,8 @@ def user_account_monitoring(request):
                     monitoring = Monitoring.objects.filter(id_user=id_1)
                 except:
                     return Response(status=status.HTTP_404_NOT_FOUND)
-                page = request.GET.get('page', 1)
-                paginator = Paginator(monitoring, 10)
-                try:
-                    data = paginator.page(page)
-                except PageNotAnInteger:
-                    data = paginator.page(1)
-                except EmptyPage:
-                    data = paginator.page(paginator.num_pages)
-
+                for x in monitoring:
+                    data.append(x)
                 serializer = MonitoringSerializer(data,context={'request': request}, many=True)
                 return Response({'data': serializer.data})
             
@@ -279,25 +272,57 @@ def user_account_monitoring_products(request):
         id_2 = int(request.META['HTTP_USER_ID'])
         if id_1 == id_2:
             '''
-            Obtenir un dictionnaire avec tous les suivis de son compte.
+            Obtenir un dictionnaire avec les informations des produits suivis.
             Nécessite un jeton d'identification !
             '''
             data = []
+            sku_liste = []
             try: 
                 monitoring = Monitoring.objects.filter(id_user=id_1)
             except:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-            page = request.GET.get('page', 1)
-            paginator = Paginator(monitoring, 10)
-            try:
-                data = paginator.page(page)
-            except PageNotAnInteger:
-                data = paginator.page(1)
-            except EmptyPage:
-                data = paginator.page(paginator.num_pages)
-
-            serializer = MonitoringSerializer(data,context={'request': request}, many=True)
+            for x in monitoring:
+                sku_liste.append(x.sku)
+            for x in sku_liste:
+                try: 
+                    product = Products.objects.get(sku=x)
+                    data.append(product)
+                except:
+                    pass
+            serializer = ProductsSerializer(data,context={'request': request}, many=True)
             return Response({'data': serializer.data})
+        return Response(status=status.HTTP_404_NOT_FOUND)
+   
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def user_account_monitoring_product(request, pk):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            '''
+            Obtenir un dictionnaire avec les informations du produit suivi.
+            Nécessite un jeton d'identification !
+            '''
+            sku_liste = []
+            try: 
+                monitoring = Monitoring.objects.filter(id_user=id_1)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            for x in monitoring:
+                sku_liste.append(x.sku)
+            try:
+                product = Products.objects.get(pk=pk)
+                if product.sku in sku_liste:
+                    serializer = ProductsSerializer(product,context={'request': request})
+                    return Response(serializer.data)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_404_NOT_FOUND)
    
     except Profile.DoesNotExist:
@@ -316,16 +341,8 @@ def profiles_list(request):
     # Mise à jour de la base de données de Token
     for profile in profiles:
         token, created = Token.objects.get_or_create(user=profile)
+        data.append(profile)
     # Voir les utilisateurs
-    page = request.GET.get('page', 1)
-    paginator = Paginator(profiles, 10)
-    try:
-        data = paginator.page(page)
-    except PageNotAnInteger:
-        data = paginator.page(1)
-    except EmptyPage:
-        data = paginator.page(paginator.num_pages)
-
     serializer = ProfilesSerializer(data,context={'request': request}, many=True)
     return Response({'data': serializer.data})
 
@@ -367,15 +384,8 @@ def monitoring_list(request):
         '''
         data = []
         monitoring = Monitoring.objects.all()
-        page = request.GET.get('page', 1)
-        paginator = Paginator(monitoring, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
-
+        for x in monitoring:
+            data.append(x)
         serializer = MonitoringsSerializer(data,context={'request': request}, many=True)
         return Response({'data': serializer.data})
     # Créer un suivi
@@ -453,15 +463,8 @@ def products_list(request):
         '''
         data = []
         products = Products.objects.all()
-        page = request.GET.get('page', 1)
-        paginator = Paginator(products, 10)
-        try:
-            data = paginator.page(page)
-        except PageNotAnInteger:
-            data = paginator.page(1)
-        except EmptyPage:
-            data = paginator.page(paginator.num_pages)
-
+        for x in products:
+            data.append(x)
         serializer = ProductsSerializer(data,context={'request': request}, many=True)
         return Response({'data': serializer.data})
     # Créer un produit
@@ -583,13 +586,7 @@ def search_products(request):
             products = products.filter(color=request.data['color'])
         except:
             pass
-    page = request.GET.get('page', 1)
-    paginator = Paginator(products, 10)
-    try:
-        data = paginator.page(page)
-    except PageNotAnInteger:
-        data = paginator.page(1)
-    except EmptyPage:
-        data = paginator.page(paginator.num_pages)
+    for x in products:
+        data.append(x)
     serializer = ProductsSerializer(data,context={'request': request}, many=True)
     return Response({'data': serializer.data})
