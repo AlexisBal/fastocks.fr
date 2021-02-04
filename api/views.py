@@ -14,6 +14,18 @@ from .serializers import *
 
 @api_view(['POST', 'GET'])
 def register(request):
+    '''
+    Inscription.
+    {
+     "gender": "M",
+     "birth_date": "2000-03-11",
+     "first_name": "Tom",
+     "last_name": "Dupont",
+     "phone": "0673537263,
+     "email": "test@fastocks.com",
+     "password": "Test007"
+    }
+    '''
     if request.method == 'GET':
         serializer = RegisterSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -32,6 +44,13 @@ def register(request):
 
 @api_view(['POST', 'GET'])
 def login(request):
+    '''
+    Connexion.
+    {
+    "email": "test@fastocks.com",
+    "password": "Test007"
+    }
+    '''
     if request.method == 'GET':
         serializer = LoginSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -48,6 +67,10 @@ def login(request):
 
 @api_view(['GET'])
 def user_account(request):
+    '''
+    Obtenir les informations du compte.
+    Nécessite un jeton d'identification
+    '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
         serializer = ProfilesSerializer(profile,context={'request': request})
@@ -64,6 +87,10 @@ def user_account(request):
 
 @api_view(['PUT'])
 def user_account_settings(request):
+    '''
+    Modification des réglages.
+    Nécessite un jeton d'identification
+    '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
         data = request.data
@@ -87,6 +114,10 @@ def user_account_settings(request):
 
 @api_view(['POST'])
 def user_account_password(request):
+    '''
+    Modification du mot de passe.
+    Nécessite un jeton d'identification
+    '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
         id_1 = int(profile.id_user)
@@ -109,6 +140,10 @@ def user_account_password(request):
 
 @api_view(['POST'])
 def user_account_delete(request):
+    '''
+    Suppression du compte.
+    Nécessite un jeton d'identification
+    '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
         serializer = ProfilesSerializer(profile,context={'request': request})
@@ -127,6 +162,10 @@ def user_account_delete(request):
 @api_view(['GET'])
 #@protected_resource()
 def profiles_list(request):
+    '''
+    Obtenir un dictionnaire avec tous les utilisateurs.
+    Nécessite une clée d'authorisation !
+    '''
     data = []
     profiles = Profile.objects.all()
     # Mise à jour de la base de données de Token
@@ -156,12 +195,20 @@ def profile_detail(request, pk):
        return Response(status=status.HTTP_404_NOT_FOUND)
 
    if request.method == 'GET':
-       serializer = ProfilesSerializer(profile,context={'request': request})
-       return Response(serializer.data)
+        '''
+        Chercher un utilisateur par id.
+        Nécessite une clée d'authorisation !
+        '''
+        serializer = ProfilesSerializer(profile,context={'request': request})
+        return Response(serializer.data)
 
    elif request.method == 'DELETE':
-       profile.delete()
-       return Response(status=status.HTTP_204_NO_CONTENT)
+        '''
+        Supprimer un utilisateur par id.
+        Nécessite une clée d'authorisation !
+        '''
+        profile.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
     
@@ -170,6 +217,10 @@ def profile_detail(request, pk):
 def monitoring_list(request):
     # Voir les suivis 
     if request.method == 'GET':
+        '''
+        Obtenir un dictionnaire avec tous les suivis.
+        Nécessite une clée d'authorisation !
+        '''
         data = []
         monitoring = Monitoring.objects.all()
         page = request.GET.get('page', 1)
@@ -185,11 +236,15 @@ def monitoring_list(request):
         return Response({'data': serializer.data})
     # Créer un suivi
     elif request.method == 'POST':
-       serializer = MonitoringSerializer(data=request.data)
-       if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data, status=status.HTTP_201_CREATED)
-       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        '''
+        Créer un suivi. 
+        Nécessite une clée d'authorisation !
+        ''' 
+        serializer = MonitoringSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -197,6 +252,10 @@ def monitoring_list(request):
 def products_list(request):
     # Voir les produits
     if request.method == 'GET':
+        '''
+        Obtenir un dictionnaire avec tous les produits.
+        Nécessite une clée d'authorisation !
+        '''
         data = []
         products = Products.objects.all()
         page = request.GET.get('page', 1)
@@ -225,6 +284,7 @@ def products_list(request):
             "stock": false,
             "price": "26.99"
         }
+        Nécessite une clée d'authorisation !
         '''
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
@@ -270,7 +330,7 @@ def product_detail(request, pk):
 
    if request.method == 'GET':
        '''
-        Obtenir un dictionnaire avec tous les produits.
+        Chercher un produit à partir de son id.
         Nécessite une clée d'authorisation !
        '''
        serializer = ProductsSerializer(product,context={'request': request})
