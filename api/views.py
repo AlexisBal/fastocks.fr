@@ -29,7 +29,7 @@ def register(request):
     if request.method == 'GET':
         serializer = RegisterSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    if request.method == 'POST':
+    elif request.method == 'POST':
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], password=request.data["password"])
@@ -54,7 +54,7 @@ def login(request):
     if request.method == 'GET':
         serializer = LoginSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    if request.method == 'POST':
+    elif request.method == 'POST':
         user = django_authenticate(email=request.data['email'], password=request.data['password'])
         if user is not None:
             pk = user.pk
@@ -142,8 +142,7 @@ def user_account_password(request):
                 profile.set_password(password)
                 profile.save()
                 return Response(status=status.HTTP_204_NO_CONTENT)            
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)
        
     except Profile.DoesNotExist:
@@ -167,9 +166,140 @@ def user_account_delete(request):
         if id_1 == id_2:
             profile.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET', 'POST'])
+def user_account_monitoring(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            if request.method == 'GET':
+                '''
+                Obtenir un dictionnaire avec tous les suivis de son compte.
+                Nécessite un jeton d'identification !
+                '''
+                data = []
+                try: 
+                    monitoring = Monitoring.objects.filter(id_user=id_1)
+                except:
+                    return Response(status=status.HTTP_404_NOT_FOUND)
+                page = request.GET.get('page', 1)
+                paginator = Paginator(monitoring, 10)
+                try:
+                    data = paginator.page(page)
+                except PageNotAnInteger:
+                    data = paginator.page(1)
+                except EmptyPage:
+                    data = paginator.page(paginator.num_pages)
+
+                serializer = MonitoringSerializer(data,context={'request': request}, many=True)
+                return Response({'data': serializer.data})
+            
+            elif request.method == 'POST':
+                '''
+                Créer un suivi.
+                Nécessite un jeton d'identification !
+                {
+                    "id_user": 1,
+                    "sku": 1,
+                    "stock": true,
+                    "price": true,
+                    "limit": "20"
+                }
+                '''
+                serializer = MonitoringSerializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def user_account_monitoring_detail(request, pk):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            try: 
+                monitoring = Monitoring.objects.get(id_user=id_1, pk=pk)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)    
+            if request.method == 'GET':
+                '''
+                Obtenir le dictionnaire du suivi.
+                Nécessite un jeton d'identification !
+                '''
+                serializer = MonitoringsSerializer(monitoring,context={'request': request})
+                return Response(serializer.data)
+
+            elif request.method == 'PUT':
+                '''
+                Modifier le suivi.
+                Nécessite un jeton d'identification !
+                {
+                    "id_user": 1,
+                    "sku": 1,
+                    "stock": true,
+                    "price": true,
+                    "limit": "20"
+                }
+                '''
+                serializer = MonitoringSerializer(monitoring, data=request.data,context={'request': request})
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            elif request.method == 'DELETE':
+                '''
+                Supprimer le suivi.
+                Nécessite un jeton d'identification !
+                '''
+                monitoring.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND) 
+
+
+@api_view(['GET'])
+def user_account_monitoring_products(request):
+    try:
+        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
+        id_1 = int(profile.id_user)
+        id_2 = int(request.META['HTTP_USER_ID'])
+        if id_1 == id_2:
+            '''
+            Obtenir un dictionnaire avec tous les suivis de son compte.
+            Nécessite un jeton d'identification !
+            '''
+            data = []
+            try: 
+                monitoring = Monitoring.objects.filter(id_user=id_1)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            page = request.GET.get('page', 1)
+            paginator = Paginator(monitoring, 10)
+            try:
+                data = paginator.page(page)
+            except PageNotAnInteger:
+                data = paginator.page(1)
+            except EmptyPage:
+                data = paginator.page(paginator.num_pages)
+
+            serializer = MonitoringSerializer(data,context={'request': request}, many=True)
+            return Response({'data': serializer.data})
+        return Response(status=status.HTTP_404_NOT_FOUND)
+   
     except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -428,27 +558,27 @@ def search_products(request):
             products = products.filter(brand=request.data['brand'])
         except Products.DoesNotExist:
             pass
-    if request.data['market_place']:
+    elif request.data['market_place']:
         try:
             products = products.filter(market_place=request.data['market_place'])
         except:
             pass
-    if request.data['name']:
+    elif request.data['name']:
         try:
             products = products.filter(name=request.data['name'])
         except:
             pass
-    if request.data['categorie']:
+    elif request.data['categorie']:
         try:
             products = products.filter(categorie=request.data['categorie'])
         except:
             pass
-    if request.data['size']:
+    elif request.data['size']:
         try:
             products = products.filter(size=request.data['size'])
         except:
             pass
-    if request.data['color']:
+    elif request.data['color']:
         try:
             products = products.filter(color=request.data['color'])
         except:
