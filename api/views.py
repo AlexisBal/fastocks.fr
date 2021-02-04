@@ -17,13 +17,13 @@ def register(request):
     '''
     Inscription.
     {
-     "gender": "M",
-     "birth_date": "2000-03-11",
-     "first_name": "Tom",
-     "last_name": "Dupont",
-     "phone": "0673537263,
-     "email": "test@fastocks.com",
-     "password": "Test007"
+        "gender": "M",
+        "birth_date": "2000-03-11",
+        "first_name": "Tom",
+        "last_name": "Dupont",
+        "phone": "0673537263,
+        "email": "test@fastocks.com",
+        "password": "Test007"
     }
     '''
     if request.method == 'GET':
@@ -47,8 +47,8 @@ def login(request):
     '''
     Connexion.
     {
-    "email": "test@fastocks.com",
-    "password": "Test007"
+        "email": "test@fastocks.com",
+        "password": "Test007"
     }
     '''
     if request.method == 'GET':
@@ -69,7 +69,7 @@ def login(request):
 def user_account(request):
     '''
     Obtenir les informations du compte.
-    Nécessite un jeton d'identification
+    Nécessite un jeton d'identification !
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
@@ -89,7 +89,14 @@ def user_account(request):
 def user_account_settings(request):
     '''
     Modification des réglages.
-    Nécessite un jeton d'identification
+    Nécessite un jeton d'identification !
+    {
+        "phone": "0695831470",
+        "alert_stock": true,
+        "alert_price": true,
+        "alert_sms": false,
+        "alert_email": false
+    }
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
@@ -116,7 +123,12 @@ def user_account_settings(request):
 def user_account_password(request):
     '''
     Modification du mot de passe.
-    Nécessite un jeton d'identification
+    Nécessite un jeton d'identification !
+    {
+        "old-password": "Test007::",
+        "password": "Test007",
+        "password-confirm": "Test007"
+    }
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
@@ -142,7 +154,10 @@ def user_account_password(request):
 def user_account_delete(request):
     '''
     Suppression du compte.
-    Nécessite un jeton d'identification
+    Nécessite un jeton d'identification !
+    {
+        "Statut": "Ok"
+    }
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
@@ -239,6 +254,13 @@ def monitoring_list(request):
         '''
         Créer un suivi. 
         Nécessite une clée d'authorisation !
+        {
+            "id_user": 1,
+            "sku": 1,
+            "stock": true,
+            "price": true,
+            "limit": "20"
+        }
         ''' 
         serializer = MonitoringSerializer(data=request.data)
         if serializer.is_valid():
@@ -273,6 +295,7 @@ def products_list(request):
     elif request.method == 'POST':
         '''
         Créer un produit.
+        Nécessite une clée d'authorisation !
         {
             "market_place": "hollister",
             "brand": "hollister",
@@ -284,7 +307,6 @@ def products_list(request):
             "stock": false,
             "price": "26.99"
         }
-        Nécessite une clée d'authorisation !
         '''
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
@@ -304,10 +326,25 @@ def monitoring_detail(request, pk):
        return Response(status=status.HTTP_404_NOT_FOUND)
 
    if request.method == 'GET':
+       '''
+       Chercher un suivi par id.
+       Nécessite une clée d'authorisation !
+       '''
        serializer = MonitoringsSerializer(monitoring,context={'request': request})
        return Response(serializer.data)
 
    elif request.method == 'PUT':
+       '''
+       Modifier un suivi par id.
+       Nécessite une clée d'authorisation !
+       {
+            "id_user": 1,
+            "sku": 1,
+            "stock": true,
+            "price": true,
+            "limit": "20"
+        }
+       '''
        serializer = MonitoringSerializer(monitoring, data=request.data,context={'request': request})
        if serializer.is_valid():
            serializer.save()
@@ -315,6 +352,10 @@ def monitoring_detail(request, pk):
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
    elif request.method == 'DELETE':
+       '''
+       Supprimer un suivi par id.
+       Nécessite une clée d'authorisation !
+       '''
        monitoring.delete()
        return Response(status=status.HTTP_204_NO_CONTENT)
 
