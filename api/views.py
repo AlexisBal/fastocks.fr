@@ -179,7 +179,7 @@ def user_account_delete(request):
 def profiles_list(request):
     '''
     Obtenir un dictionnaire avec tous les utilisateurs.
-    Nécessite une clée d'authorisation !
+    Nécessite une clée d'autorisation !
     '''
     data = []
     profiles = Profile.objects.all()
@@ -212,7 +212,7 @@ def profile_detail(request, pk):
    if request.method == 'GET':
         '''
         Chercher un utilisateur par id.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         '''
         serializer = ProfilesSerializer(profile,context={'request': request})
         return Response(serializer.data)
@@ -220,13 +220,12 @@ def profile_detail(request, pk):
    elif request.method == 'DELETE':
         '''
         Supprimer un utilisateur par id.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         '''
         profile.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-    
 @api_view(['GET', 'POST'])
 #@protected_resource()
 def monitoring_list(request):
@@ -234,7 +233,7 @@ def monitoring_list(request):
     if request.method == 'GET':
         '''
         Obtenir un dictionnaire avec tous les suivis.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         '''
         data = []
         monitoring = Monitoring.objects.all()
@@ -253,7 +252,7 @@ def monitoring_list(request):
     elif request.method == 'POST':
         '''
         Créer un suivi. 
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         {
             "id_user": 1,
             "sku": 1,
@@ -269,6 +268,50 @@ def monitoring_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'PUT', 'DELETE'])
+#@protected_resource()
+def monitoring_detail(request, pk):
+   # Retrouver, modifier ou supprimer un suivi par id/pk
+   try:
+       monitoring = Monitoring.objects.get(pk=pk)
+   except Monitoring.DoesNotExist:
+       return Response(status=status.HTTP_404_NOT_FOUND)
+
+   if request.method == 'GET':
+       '''
+       Chercher un suivi par id.
+       Nécessite une clée d'autorisation !
+       '''
+       serializer = MonitoringsSerializer(monitoring,context={'request': request})
+       return Response(serializer.data)
+
+   elif request.method == 'PUT':
+       '''
+       Modifier un suivi par id.
+       Nécessite une clée d'autorisation !
+       {
+            "id_user": 1,
+            "sku": 1,
+            "stock": true,
+            "price": true,
+            "limit": "20"
+        }
+       '''
+       serializer = MonitoringSerializer(monitoring, data=request.data,context={'request': request})
+       if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data)
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+   elif request.method == 'DELETE':
+       '''
+       Supprimer un suivi par id.
+       Nécessite une clée d'autorisation !
+       '''
+       monitoring.delete()
+       return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'POST'])
 #@protected_resource()
 def products_list(request):
@@ -276,7 +319,7 @@ def products_list(request):
     if request.method == 'GET':
         '''
         Obtenir un dictionnaire avec tous les produits.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         '''
         data = []
         products = Products.objects.all()
@@ -295,7 +338,7 @@ def products_list(request):
     elif request.method == 'POST':
         '''
         Créer un produit.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         {
             "market_place": "hollister",
             "brand": "hollister",
@@ -315,51 +358,6 @@ def products_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
-#@protected_resource()
-def monitoring_detail(request, pk):
-   # Retrouver, modifier ou supprimer un suivi par id/pk
-   try:
-       monitoring = Monitoring.objects.get(pk=pk)
-   except Monitoring.DoesNotExist:
-       return Response(status=status.HTTP_404_NOT_FOUND)
-
-   if request.method == 'GET':
-       '''
-       Chercher un suivi par id.
-       Nécessite une clée d'authorisation !
-       '''
-       serializer = MonitoringsSerializer(monitoring,context={'request': request})
-       return Response(serializer.data)
-
-   elif request.method == 'PUT':
-       '''
-       Modifier un suivi par id.
-       Nécessite une clée d'authorisation !
-       {
-            "id_user": 1,
-            "sku": 1,
-            "stock": true,
-            "price": true,
-            "limit": "20"
-        }
-       '''
-       serializer = MonitoringSerializer(monitoring, data=request.data,context={'request': request})
-       if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data)
-       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-   elif request.method == 'DELETE':
-       '''
-       Supprimer un suivi par id.
-       Nécessite une clée d'authorisation !
-       '''
-       monitoring.delete()
-       return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 @api_view(['GET', 'PUT', 'DELETE'])
 #@protected_resource()
 def product_detail(request, pk):
@@ -372,7 +370,7 @@ def product_detail(request, pk):
    if request.method == 'GET':
        '''
         Chercher un produit à partir de son id.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
        '''
        serializer = ProductsSerializer(product,context={'request': request})
        return Response(serializer.data)
@@ -380,7 +378,7 @@ def product_detail(request, pk):
    elif request.method == 'PUT':
        '''
         Modifier un produit.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         {
             "market_place": "hollister",
             "brand": "hollister",
@@ -402,7 +400,7 @@ def product_detail(request, pk):
    elif request.method == 'DELETE':
         '''
         Supprimer un produit.
-        Nécessite une clée d'authorisation !
+        Nécessite une clée d'autorisation !
         '''
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -413,7 +411,7 @@ def product_detail(request, pk):
 def search_products(request):
     '''
     Filtrer les produits selon des caractéristiques.
-    Nécessite une clée d'authorisation !
+    Nécessite une clée d'autorisation !
     {
         "market_place": "amazon",
         "brand": "hollister",

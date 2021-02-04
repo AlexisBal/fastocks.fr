@@ -73,8 +73,8 @@ class Monitoring(models.Model,):
     id_monitoring = models.AutoField(
         verbose_name="id monitoring", primary_key=True, null=False, unique=True
     )
-    id_user = IntegerField(verbose_name="id user", null=False, unique=True)
-    sku = IntegerField(verbose_name="sku", null=False, unique=True)
+    id_user = IntegerField(verbose_name="id user", null=False)
+    sku = IntegerField(verbose_name="sku", null=False)
     stock = models.BooleanField(verbose_name="stock", default=True)
     price = models.BooleanField(verbose_name="price", default=True)
     limit = models.DecimalField(verbose_name="limit", max_digits=16, decimal_places=6)
