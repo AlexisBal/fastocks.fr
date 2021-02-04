@@ -10,28 +10,6 @@ from rest_framework.authtoken.models import Token
 
 from .models import *
 from .serializers import *
-
-
-@api_view(['GET'])
-#@protected_resource()
-def profiles_list(request):
-    data = []
-    profiles = Profile.objects.all()
-    # Mise à jour de la base de données de Token
-    for profile in profiles:
-        token, created = Token.objects.get_or_create(user=profile)
-    # Voir les utilisateurs
-    page = request.GET.get('page', 1)
-    paginator = Paginator(profiles, 10)
-    try:
-        data = paginator.page(page)
-    except PageNotAnInteger:
-        data = paginator.page(1)
-    except EmptyPage:
-        data = paginator.page(paginator.num_pages)
-
-    serializer = ProfilesSerializer(data,context={'request': request}, many=True)
-    return Response({'data': serializer.data})
     
 
 @api_view(['POST', 'GET'])
@@ -145,6 +123,47 @@ def user_account_delete(request):
     except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['GET'])
+#@protected_resource()
+def profiles_list(request):
+    data = []
+    profiles = Profile.objects.all()
+    # Mise à jour de la base de données de Token
+    for profile in profiles:
+        token, created = Token.objects.get_or_create(user=profile)
+    # Voir les utilisateurs
+    page = request.GET.get('page', 1)
+    paginator = Paginator(profiles, 10)
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+
+    serializer = ProfilesSerializer(data,context={'request': request}, many=True)
+    return Response({'data': serializer.data})
+
+
+@api_view(['GET', 'DELETE'])
+#@protected_resource()
+def profile_detail(request, pk):
+   # Retrouver, modifier ou supprimer un utilisateur par id/pk
+   try:
+       profile = Profile.objects.get(pk=pk)
+   except Profile.DoesNotExist:
+       return Response(status=status.HTTP_404_NOT_FOUND)
+
+   if request.method == 'GET':
+       serializer = ProfilesSerializer(profile,context={'request': request})
+       return Response(serializer.data)
+
+   elif request.method == 'DELETE':
+       profile.delete()
+       return Response(status=status.HTTP_204_NO_CONTENT)
+
+
     
 @api_view(['GET', 'POST'])
 #@protected_resource()
@@ -193,36 +212,26 @@ def products_list(request):
         return Response({'data': serializer.data})
     # Créer un produit
     elif request.method == 'POST':
-       serializer = ProductSerializer(data=request.data)
-       if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data, status=status.HTTP_201_CREATED)
-       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        '''
+        Créer un produit.
+        {
+            "market_place": "hollister",
+            "brand": "hollister",
+            "name": "Sweat ras du cou à logo brodé",
+            "categorie": "vetement",
+            "size": "M",
+            "color": "Gris Clair Chiné",
+            "request": "test.fr",
+            "stock": false,
+            "price": "26.99"
+        }
+        '''
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
-#@protected_resource()
-def profile_detail(request, pk):
-   # Retrouver, modifier ou supprimer un utilisateur par id/pk
-   try:
-       profile = Profile.objects.get(pk=pk)
-   except Profile.DoesNotExist:
-       return Response(status=status.HTTP_404_NOT_FOUND)
-
-   if request.method == 'GET':
-       serializer = ProfilesSerializer(profile,context={'request': request})
-       return Response(serializer.data)
-
-   elif request.method == 'PUT':
-       serializer = ProfilesSerializer(profile, data=request.data,context={'request': request})
-       if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data)
-       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-   elif request.method == 'DELETE':
-       profile.delete()
-       return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -260,10 +269,29 @@ def product_detail(request, pk):
        return Response(status=status.HTTP_404_NOT_FOUND)
 
    if request.method == 'GET':
+       '''
+        Obtenir un dictionnaire avec tous les produits.
+        Nécessite une clée d'authorisation !
+       '''
        serializer = ProductsSerializer(product,context={'request': request})
        return Response(serializer.data)
 
    elif request.method == 'PUT':
+       '''
+        Modifier un produit.
+        Nécessite une clée d'authorisation !
+        {
+            "market_place": "hollister",
+            "brand": "hollister",
+            "name": "Sweat ras du cou à logo brodé",
+            "categorie": "vetement",
+            "size": "M",
+            "color": "Gris Clair Chiné",
+            "request": "test.fr",
+            "stock": false,
+            "price": "26.99"
+        }
+        '''
        serializer = ProductSerializer(product, data=request.data,context={'request': request})
        if serializer.is_valid():
            serializer.save()
@@ -271,5 +299,68 @@ def product_detail(request, pk):
        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
    elif request.method == 'DELETE':
-       product.delete()
-       return Response(status=status.HTTP_204_NO_CONTENT)
+        '''
+        Supprimer un produit.
+        Nécessite une clée d'authorisation !
+        '''
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+#@protected_resource()
+def search_products(request):
+    '''
+    Filtrer les produits selon des caractéristiques.
+    Nécessite une clée d'authorisation !
+    {
+        "market_place": "amazon",
+        "brand": "hollister",
+        "categorie": "",
+        "name": "",
+        "size": "", 
+        "color": ""
+    }
+    '''
+    data = []
+    products = Products.objects.all()
+    if request.data['brand']:
+        try:
+            products = products.filter(brand=request.data['brand'])
+        except Products.DoesNotExist:
+            pass
+    if request.data['market_place']:
+        try:
+            products = products.filter(market_place=request.data['market_place'])
+        except:
+            pass
+    if request.data['name']:
+        try:
+            products = products.filter(name=request.data['name'])
+        except:
+            pass
+    if request.data['categorie']:
+        try:
+            products = products.filter(categorie=request.data['categorie'])
+        except:
+            pass
+    if request.data['size']:
+        try:
+            products = products.filter(size=request.data['size'])
+        except:
+            pass
+    if request.data['color']:
+        try:
+            products = products.filter(color=request.data['color'])
+        except:
+            pass
+    page = request.GET.get('page', 1)
+    paginator = Paginator(products, 10)
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+    serializer = ProductsSerializer(data,context={'request': request}, many=True)
+    return Response({'data': serializer.data})
