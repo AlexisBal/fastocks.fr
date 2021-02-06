@@ -2,6 +2,8 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.forms.fields import ChoiceField
+from django.forms.widgets import Select
 from rest_framework.authtoken.models import Token
 
 from .models import Profile
@@ -13,7 +15,7 @@ class UserAdminCreationForm(forms.ModelForm):
     A form for creating new users. Includes all the required
     fields, plus a repeated password.
     """
-    gender = forms.CharField(label='Gender')
+    gender = forms.ChoiceField(choices=[('M', 'M',), ('F', 'F',)])
     birth_date = forms.DateInput()
     first_name = forms.CharField(label='First Name')
     last_name = forms.CharField(label='Last Name')
@@ -50,11 +52,12 @@ class UserAdminChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
+
     password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = Profile
-        fields = ('email', 'password', 'is_active', 'is_admin', 'gender', 'birth_date', 'first_name', 'last_name')
+        fields = ('email', 'password', 'is_active', 'is_admin', 'gender', 'birth_date', 'first_name', 'last_name', 'alert_stock', 'alert_price', 'alert_sms', 'alert_email')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
