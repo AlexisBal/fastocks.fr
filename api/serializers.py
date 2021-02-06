@@ -6,8 +6,7 @@ class ProfilesSerializer(serializers.ModelSerializer):
        model = Profile
        fields = (
            'id_user',
-           'superuser',
-           'staff',
+           'is_admin',
            'gender', 
            'birth_date',
            'first_name',
@@ -20,7 +19,7 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'alert_sms',
            'alert_email',
            'last_login',
-           'active',
+           'is_active',
            'createdAt',
            'token'
        )

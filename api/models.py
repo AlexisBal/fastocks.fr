@@ -1,17 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models.fields import IntegerField
-from django.contrib.auth.models import PermissionsMixin
 
 from .managers import UserManager
 
 
-class Profile(AbstractBaseUser, PermissionsMixin):
+class Profile(AbstractBaseUser):
     id_user = models.AutoField(verbose_name="id user", primary_key=True, unique=True)
-    gender = models.CharField(verbose_name="gender", max_length=1, null=True)
-    birth_date = models.DateField(verbose_name="birth date", null=True)
-    first_name = models.CharField(verbose_name="first name", max_length=60, null=True)
-    last_name = models.CharField(verbose_name="last name", max_length=60, null=True)
+    gender = models.CharField(verbose_name="gender", max_length=1, null=True, default=None)
+    birth_date = models.DateField(verbose_name="birth date", null=True, default=None)
+    first_name = models.CharField(verbose_name="first name", max_length=60, null=True, default=None)
+    last_name = models.CharField(verbose_name="last name", max_length=60, null=True, default=None)
     phone = models.CharField(
         verbose_name="phone", max_length=20, unique=True, null=True, default=None
     )
@@ -20,9 +19,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     alert_price = models.BooleanField(default=True)
     alert_sms = models.BooleanField(default=False)
     alert_email = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
-    staff = models.BooleanField(default=False)  # a admin user; non super-user
-    superuser = models.BooleanField(default=False)  # a superuser
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     token = models.CharField(verbose_name="token", max_length=255, unique=True, default=None,  null=True)
     createdAt = models.DateTimeField("Created At", auto_now_add=True)
 
@@ -31,39 +29,24 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    def get_full_name(self):
-        # The user is identified by their email address
-        return self.email
-
-    def get_short_name(self):
-        # The user is identified by their email address
-        return self.email
-
     def __str__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
         "Is the user a member of staff?"
-        return self.staff
-
-    @property
-    def is_superuser(self):
-        "Is the user a admin member?"
-        return self.superuser
-
-    @property
-    def is_active(self):
-        "Is the user active?"
-        return self.active
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
 
     class Meta:
         db_table = "fastocks_users"

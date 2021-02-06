@@ -5,8 +5,6 @@ from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from rest_framework.authtoken.models import Token
 
 from .models import *
 from .serializers import *
@@ -21,7 +19,6 @@ def register(request):
         "birth_date": "2000-03-11",
         "first_name": "Tom",
         "last_name": "Dupont",
-        "phone": "0673537263,
         "email": "test@fastocks.com",
         "password": "Test007"
     }
@@ -32,12 +29,7 @@ def register(request):
     elif request.method == 'POST':
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            user = Profile(gender=request.data['gender'], birth_date=request.data["birth_date"], first_name=request.data["first_name"], last_name=request.data["last_name"], email=request.data["email"], password=request.data["password"])
-            user.set_password(request.data["password"])
-            user.save()
-            token, created = Token.objects.get_or_create(user=user) # Création d'un token unique
-            user.token = token.key
-            user.save()
+            Profile.objects.create_user(gender=request.data['gender'], birth_date=request.data['birth_date'], first_name=request.data['first_name'], last_name=request.data['last_name'], email=request.data['email'], password=request.data['password'])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -340,7 +332,6 @@ def profiles_list(request):
     profiles = Profile.objects.all()
     # Mise à jour de la base de données de Token
     for profile in profiles:
-        token, created = Token.objects.get_or_create(user=profile)
         data.append(profile)
     # Voir les utilisateurs
     serializer = ProfilesSerializer(data,context={'request': request}, many=True)
