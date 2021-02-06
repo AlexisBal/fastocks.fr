@@ -14,7 +14,7 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     gender = forms.CharField(label='Gender')
-    birth_date = forms.CharField(label='Birth Date')
+    birth_date = forms.DateInput()
     first_name = forms.CharField(label='First Name')
     last_name = forms.CharField(label='Last Name')
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -22,7 +22,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('email',)
+        fields = ('email', 'gender', 'birth_date', 'first_name', 'last_name')
 
     def clean_password2(self):
         # Check that the two password entries match
