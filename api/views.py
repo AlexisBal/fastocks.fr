@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect, render, HttpResponse
-from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
+from django.contrib.auth import authenticate as django_authenticate, login as django_login
 
 from .models import *
 from .serializers import *
@@ -49,9 +49,8 @@ def login(request):
     elif request.method == 'POST':
         user = django_authenticate(email=request.data['email'], password=request.data['password'])
         if user is not None:
-            pk = user.pk
-            profile = Profile.objects.get(pk=pk)
-            serializer = ProfilesSerializer(profile,context={'request': request})
+            django_login(user=user, request=request)
+            serializer = ProfilesSerializer(user,context={'request': request})
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
