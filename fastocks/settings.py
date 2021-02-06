@@ -137,7 +137,7 @@ OAUTH2_PROVIDER = {
 
 LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'Europe/Istanbul'
+TIME_ZONE = "Europe/Paris"
 
 USE_I18N = True
 
