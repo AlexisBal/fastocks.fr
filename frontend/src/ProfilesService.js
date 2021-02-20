@@ -3,6 +3,11 @@ const API_URL = 'http://localhost:8000';
 
 export default class ProfilesService{
 
+   login(user) {
+       const url = `${API_URL}/api/login`;
+       return axios.post(url, user);
+   } 
+
    getProfiles() {
         console.log("get profiles");
         const url = `${API_URL}/api/profiles/`;
