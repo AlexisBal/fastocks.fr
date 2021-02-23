@@ -46,23 +46,23 @@ class Login extends Component {
       render() {
         console.log(this.state.rememberMe)
         return (
-        <body class="text-center">
-          <main class="form-signin">
-            <form onSubmit={this.handleSubmit}>
-                <h1 class="h3 mb-3 fw-normal">Merci de vous connecter</h1>
-                <input type="email" ref="email" id="email" class="form-control" placeholder="Adresse email" required autofocus></input>
-                <input type="password" ref="password" id="password" class="form-control" placeholder="Mot de passe" required></input>
-                <div class="checkbox mb-3">
-                    <label>
-                      <input type="checkbox" onChange={this.handleRememberMe}></input>
-                      {'\n'} Rester connecté 
-                    </label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit" value="Submit">Connexion</button>
-                <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
-            </form>
-         </main>
-       </body>
+          <body class="text-center">
+            <main class="form-signin">
+              <form onSubmit={this.handleSubmit}>
+                  <h1 class="h3 mb-3 fw-normal">Merci de vous connecter</h1>
+                  <input type="email" ref="email" id="email" class="form-control" placeholder="Adresse email" required autofocus></input>
+                  <input type="password" ref="password" id="password" class="form-control" placeholder="Mot de passe" required></input>
+                  <div class="checkbox mb-3">
+                      <label>
+                        <input type="checkbox" onChange={this.handleRememberMe}></input>
+                        {'\n'} Rester connecté 
+                      </label>
+                  </div>
+                  <button class="w-100 btn btn-lg btn-primary" type="submit" value="Submit">Connexion</button>
+                  <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+              </form>
+          </main>
+        </body>
        );
       }  
 }
