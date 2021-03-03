@@ -1,20 +1,38 @@
 import React, { Component } from 'react';
+import {
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
 import ProfilesService from  '../ProfilesService'
+import { useAuth } from "../Auth";
 
 const profilesService = new ProfilesService();
+
 
 class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-          rememberMe: false
+          rememberMe: false,
+          email: '',
+          password: ''
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRememberMe = this.handleRememberMe.bind(this)
      }
+    
+    handleRememberInfo = e => {
+      const name = e.target.type;
+      const value = e.target.value;
+      this.setState(prevstate => {
+        const newState = { ...prevstate };
+        newState[name] = value;
+        return newState;
+      });
+    };
 
     handleRememberMe(){
       if (this.state.rememberMe) {
@@ -44,14 +62,13 @@ class Login extends Component {
     }
     
       render() {
-        console.log(this.state.rememberMe)
         return (
           <body class="text-center">
             <main class="form-signin">
               <form onSubmit={this.handleSubmit}>
                   <h1 class="h3 mb-3 fw-normal">Merci de vous connecter</h1>
-                  <input type="email" ref="email" id="email" class="form-control" placeholder="Adresse email" required autofocus></input>
-                  <input type="password" ref="password" id="password" class="form-control" placeholder="Mot de passe" required></input>
+                  <input type="email" ref="email" id="email" class="form-control" placeholder="Adresse email" required autofocus onChange={this.handleRememberInfo} value={this.state.email}></input>
+                  <input type="password" ref="password" id="password" class="form-control" placeholder="Mot de passe" required onChange={this.handleRememberInfo}></input>
                   <div class="checkbox mb-3">
                       <label>
                         <input type="checkbox" onChange={this.handleRememberMe}></input>

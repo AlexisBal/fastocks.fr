@@ -3,7 +3,6 @@ from oauth2_provider.decorators import protected_resource
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
-from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth import authenticate as django_authenticate, login as django_login
 
 from .models import *

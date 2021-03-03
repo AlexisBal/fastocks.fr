@@ -1,14 +1,26 @@
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom'
-import { Route } from 'react-router-dom'
+import React, { Component } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { withRouter } from "react-router";
 
-import  ProfileCreateUpdate  from './ProfileCreateUpdate'
-import Login from './Screens/Login'
-import Home from './Screens/Home'
+import ProfileCreateUpdate  from './ProfileCreateUpdate'
+import PrivateRoute from './PrivateRoute';
+import { ProvideAuth } from "./Auth";
+import Login from './Screens/Login';
+import Home from './Screens/Home';
+import ProfileHome from './Screens/ProfileHome';
 import './App.css';
 
+
+// Nav Bar 
 const Header = props => {
   const { location } = props;
   return (
@@ -25,29 +37,31 @@ const Header = props => {
   </Navbar>
   );
 };
-
 const HeaderWithRouter = withRouter(Header);
 
+// Router
 const BaseLayout = () => (
   <div className="container-fluid">  
       <HeaderWithRouter />
 
-      <div className="content">
+      <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
         <Route path="/profile/:pk" component={ProfileCreateUpdate} />
         <Route path="/profile/" exact component={ProfileCreateUpdate} />
-      </div>
-
+        <PrivateRoute path="/myaccount" exact component={ProfileHome} />
+      </Switch>
   </div>
 )
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <BaseLayout/>
-      </BrowserRouter>
+      <ProvideAuth>
+        <Router>
+          <BaseLayout/>
+        </Router>
+      </ProvideAuth>
     );
   }
 }
