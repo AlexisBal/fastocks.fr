@@ -1,8 +1,7 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
-  Route,
-  Switch
+  Route
 } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { withRouter } from "react-router";
