@@ -1,19 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation
+  Switch
 } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { withRouter } from "react-router";
 
 import ProfileCreateUpdate  from './ProfileCreateUpdate'
 import PrivateRoute from './PrivateRoute';
-import { ProvideAuth } from "./Auth";
+import { AuthContext } from "./Auth";
+import useToken from './UseToken';
 import Login from './Screens/Login';
 import Home from './Screens/Home';
 import ProfileHome from './Screens/ProfileHome';
@@ -43,27 +40,25 @@ const HeaderWithRouter = withRouter(Header);
 const BaseLayout = () => (
   <div className="container-fluid">  
       <HeaderWithRouter />
-
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" exact component={Login} />
-        <Route path="/profile/:pk" component={ProfileCreateUpdate} />
-        <Route path="/profile/" exact component={ProfileCreateUpdate} />
-        <PrivateRoute path="/myaccount" exact component={ProfileHome} />
-      </Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/profile/:pk" component={ProfileCreateUpdate} />
+      <Route path="/profile/" component={ProfileCreateUpdate} />
+      <PrivateRoute path="/myaccount" component={ProfileHome} />
   </div>
 )
 
-class App extends Component {
-  render() {
-    return (
-      <ProvideAuth>
-        <Router>
-          <BaseLayout/>
-        </Router>
-      </ProvideAuth>
-    );
-  }
+// App
+function App() {
+  const { token, setToken } = useToken();
+  
+  return (
+    <AuthContext.Provider value={{token, setToken }}>
+      <Router>
+        <BaseLayout/>
+      </Router>
+    </AuthContext.Provider>
+  );
 }
 
 export default App;
