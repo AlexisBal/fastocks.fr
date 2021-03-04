@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
-import {Alert, Button} from 'react-bootstrap';
+import {Alert} from 'react-bootstrap';
 
 import ProfilesService from  '../ProfilesService'
 import { useAuth } from "../Auth";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route
@@ -8,7 +8,7 @@ import { withRouter } from "react-router";
 
 import ProfileCreateUpdate  from './ProfileCreateUpdate'
 import PrivateRoute from './PrivateRoute';
-import { AuthContext } from "./Auth";
+import { AuthContext, useAuth } from "./Auth";
 import useToken from './UseToken';
 import Login from './Screens/Login';
 import Home from './Screens/Home';
@@ -19,15 +19,23 @@ import './App.css';
 // Nav Bar 
 const Header = props => {
   const { location } = props;
+  const { token} = useAuth();
+  var displayNavPublic = false;
+  var displayNavPrivate = true;
+  if (token) {
+    displayNavPublic = true;
+    displayNavPrivate = false;
+  }
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Navbar.Brand >Fastocks</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
       <Nav activeKey={location.pathname} className="mr-auto">
-          <Nav.Link href="/">Accueil</Nav.Link>
-          <Nav.Link href="/login">Se connecter</Nav.Link>
-          <Nav.Link href="#">S'inscrire</Nav.Link>
+          <Nav.Link href="/" hidden={displayNavPublic}>Accueil</Nav.Link>
+          <Nav.Link href="/myaccount" hidden={displayNavPrivate}>Accueil</Nav.Link>
+          <Nav.Link href="/login" hidden={displayNavPublic}>Se connecter</Nav.Link>
+          <Nav.Link href="#" hidden={displayNavPublic}>S'inscrire</Nav.Link>
       </Nav>
       </Navbar.Collapse>
   </Navbar>
@@ -50,7 +58,6 @@ const BaseLayout = () => (
 // App
 function App() {
   const { token, setToken } = useToken();
-  
   return (
     <AuthContext.Provider value={{token, setToken }}>
       <Router>
