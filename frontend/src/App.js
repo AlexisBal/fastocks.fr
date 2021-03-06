@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route
@@ -6,11 +5,12 @@ import {
 import { Navbar, Nav } from 'react-bootstrap';
 import { withRouter } from "react-router";
 
-import ProfileCreateUpdate  from './ProfileCreateUpdate'
-import PrivateRoute from './PrivateRoute';
-import { AuthContext, useAuth } from "./Auth";
-import useToken from './UseToken';
+import ProfileCreateUpdate  from './API/ProfileCreateUpdate'
+import PrivateRoute from './Tracking/PrivateRoute';
+import { AuthContext, useAuth } from "./Tracking/Auth";
+import useToken from './Tracking/UseToken';
 import Login from './Screens/Login';
+import Register from './Screens/Register';
 import Home from './Screens/Home';
 import ProfileHome from './Screens/ProfileHome';
 import './App.css';
@@ -35,7 +35,7 @@ const Header = props => {
           <Nav.Link href="/" hidden={displayNavPublic}>Accueil</Nav.Link>
           <Nav.Link href="/myaccount" hidden={displayNavPrivate}>Accueil</Nav.Link>
           <Nav.Link href="/login" hidden={displayNavPublic}>Se connecter</Nav.Link>
-          <Nav.Link href="#" hidden={displayNavPublic}>S'inscrire</Nav.Link>
+          <Nav.Link href="/register" hidden={displayNavPublic}>S'inscrire</Nav.Link>
       </Nav>
       </Navbar.Collapse>
   </Navbar>
@@ -49,6 +49,7 @@ const BaseLayout = () => (
       <HeaderWithRouter />
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
+      <Route path='/register' component={Register}/>
       <Route path="/profile/:pk" component={ProfileCreateUpdate} />
       <Route path="/profile/" component={ProfileCreateUpdate} />
       <PrivateRoute path="/myaccount" component={ProfileHome} />

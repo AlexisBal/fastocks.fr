@@ -5,6 +5,11 @@ body {
   background-color: #f5f5f5;
 }
 
+.error {
+  color: red;
+  position: relative;
+}
+
 .form-signin {
   width: 100%;
   max-width: 330px;
@@ -33,6 +38,65 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.form-register {
+  width: 40%;
+  padding: 15px;
+  margin: auto;
+}
+.form-register .checkbox {
+  font-weight: 400;
+}
+.form-register .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-register .form-control:focus {
+  z-index: 2;
+}
+.form-register .gender {
+  margin-bottom: 15px;
+}
+.form-register #birthdate {
+  margin-bottom: 20px;
+}
+.form-register #lastname {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-register #firstname {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-register #email {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-register #email-confirm {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-register #password {
+  margin-bottom: -1px;
+  margin-top: 20px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-register #password-confirm {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.datePicker {
+  width: 100%;
 }
 
 code {

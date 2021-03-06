@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
 import {Alert} from 'react-bootstrap';
 
-import ProfilesService from  '../ProfilesService'
-import { useAuth } from "../Auth";
+import ProfilesService from  '../API/ProfilesService'
+import { useAuth } from "../Tracking/Auth";
 
 
 const profilesService = new ProfilesService();
@@ -67,7 +67,6 @@ function Login() {
                   </label>
               </div>
               <button className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Connexion</button>
-              <p className="mt-5 mb-3 text-muted">&copy; 2021</p>
           </form>
       </main>
     </body>

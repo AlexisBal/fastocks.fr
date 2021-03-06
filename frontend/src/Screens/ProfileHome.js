@@ -1,4 +1,4 @@
-import { useAuth } from "../Auth";
+import { useAuth } from "../Tracking/Auth";
 import React from 'react';
 
 function ProfileHome () {
@@ -11,7 +11,7 @@ function ProfileHome () {
   return (
     <div>
       <div>Admin Page</div>
-      <button class="w-100 btn btn-lg btn-primary" onClick={logOut}>Log out</button>
+      <button className="w-100 btn btn-lg btn-primary" onClick={logOut}>Log out</button>
     </div>
   );
 }
