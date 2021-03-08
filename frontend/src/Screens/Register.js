@@ -93,6 +93,28 @@ function Register() {
       if (!errorPwd) {
         setErrorMessagePwd("");
       }
+
+      // Formatage Date 
+      var jour = birthDate.getDate().toString(); 
+      if (jour.length === 1) {
+        jour = "0" + jour;
+      }
+      var mois = (birthDate.getMonth()+1).toString();
+      if (mois.length === 1) {
+        mois = "0" + mois;
+      }
+      var annee = birthDate.getFullYear().toString(); 
+      const date = annee+'-'+mois+'-'+jour
+
+      // Requete API 
+      profilesService.register({
+        "gender": gender,
+        "birth_date": date,
+        "first_name": firstName,
+        "last_name": lastName,
+        "email": email,
+        "password": password
+    })
     }
 
     if (isLoggedIn) {
@@ -121,8 +143,8 @@ function Register() {
                className="form-control" 
                id="birthdate" 
                placeholderText='Date de naissance (JJ/MM/AAAA)' 
-               locale="fr" 
-               dateFormat={"dd/MM/yyyy"}  
+               locale={"fr"}
+               dateFormat="dd/MM/yyyy"
                selected={birthDate} 
                onChange={date => setBirthDate(date)}/>
               <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
