@@ -24,7 +24,8 @@ function Register() {
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [isLoggedIn, setLoggedIn] = useState(false);
-    const [error, setError] = useState(false);
+    const [errorMail, setErrorMail] = useState(false);
+    const [errorPwd, setErrorPwd] = useState(false);
     const [errorMessageEmail, setErrorMessageEmail] = useState("");
     const [errorMessagePwd, setErrorMessagePwd] = useState("");
     const { setToken, token} = useAuth();
@@ -33,14 +34,65 @@ function Register() {
       return <Redirect to={"/myaccount"} />;
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = e => {
       e.preventDefault();
-      if (email != emailConfirm) {
+      
+      // vérification des emails entrées 
+      if (email !== emailConfirm) {
         let err = <strong className="error">Les adresses email saisies sont différentes !</strong>;
         setErrorMessageEmail(err);
-        setError(true);
+        setErrorMail(true);
       }
-  
+      else {
+        setErrorMail(false);
+      }
+
+      // vérification des mots de passe entrés 
+      if (password !== passwordConfirm) {
+        let err = <strong className="error">Les mots de passe saisis sont différents !</strong>;
+        setErrorMessagePwd(err);
+        setErrorPwd(true);
+      }
+      else {
+        if (password.length < 8) {
+          let err = <strong className="error">Le mot de passe doit contenir au minimum 8 caractères !</strong>;
+          setErrorMessagePwd(err);
+          setErrorPwd(true);
+        }
+        else {
+          var x;
+          var y;
+          var checked1 = false;
+          var checked2 = false;
+          const symbols = ['#', '@', '&', '§', '!', '°', '*', '$', '¥', '€', '£', '%', '?', ';', '.', ':', '/', '+', '=', '<', '>', '-', '_', '{', '}', '(', ')', '[', ']']
+          for (x=0;x<10;x++) {
+            if (password.indexOf(x) !== -1) {
+              checked1 = true;
+              break;
+            }
+          }
+          if (!checked1) {
+            let err = <strong className="error">Le mot de passe doit contenir au minimum 1 chiffre !</strong>;
+            setErrorMessagePwd(err);
+            setErrorPwd(true);
+          }
+          for (y in symbols) {
+            if (password.indexOf(symbols[y]) !== -1) {
+              checked2 = true;
+              setErrorPwd(false);
+              break;
+            }
+          }
+          if (!checked2) {
+            let err = <strong className="error">Le mot de passe doit contenir au minimum 1 caractère spécial !</strong>;
+            setErrorMessagePwd(err);
+            setErrorPwd(true);
+          }
+        }
+      }
+      if (!errorPwd) {
+        setErrorMessagePwd("");
+      }
     }
 
     if (isLoggedIn) {
@@ -75,12 +127,13 @@ function Register() {
                onChange={date => setBirthDate(date)}/>
               <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
               <input type="text" id="firstname" className="form-control" placeholder="Prénom" required onChange={e => setFirstName(e.target.value)}></input>
-              <input type="email" id="email" className="form-control" placeholder="Adresse email" required  onChange={e => setEmail(e.target.value)}></input>
-              <input type="email" id="email-confirm" className="form-control" placeholder="Confirmation de l'adresse email" required onChange={e => setEmailConfirm(e.target.value)}></input>
+              <input type="email" id="email" className="form-control" placeholder="Adresse email" autoComplete="on" required  onChange={e => [setEmail(e.target.value), setErrorMessageEmail("")]}></input>
+              <input type="email" id="email-confirm" className="form-control" placeholder="Confirmation de l'adresse email" required onChange={e => [setEmailConfirm(e.target.value), setErrorMessageEmail("")]}></input>
               {errorMessageEmail}
-              <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => setPassword(e.target.value)}></input>
-              <input type="password" id="password-confirm" className="form-control" placeholder="Confirmation du mot de passe" required onChange={e => setPasswordConfirm(e.target.value)}></input>
-              <button className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Inscription</button>
+              <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => [setPassword(e.target.value), setErrorMessagePwd("")]}></input>
+              <input type="password" id="password-confirm" className="form-control" placeholder="Confirmation du mot de passe" required onChange={e => [setPasswordConfirm(e.target.value), setErrorMessagePwd("")]}></input>
+              {errorMessagePwd}
+              <button id="register-confirm" className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Inscription</button>
           </form>
       </main>
     </body>

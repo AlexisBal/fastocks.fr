@@ -8,6 +8,11 @@ export default class ProfilesService{
        return axios.post(url, user);
    } 
 
+    register(user) {
+        const url = `${API_URL}/api/register`;
+        return axios.post(url, user);
+    } 
+
    getProfiles() {
         console.log("get profiles");
         const url = `${API_URL}/api/profiles/`;

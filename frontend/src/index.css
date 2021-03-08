@@ -91,9 +91,12 @@ body {
   border-bottom-left-radius: 0;
 }
 .form-register #password-confirm {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+.form-register #register-confirm {
+  margin-top: 20px;
 }
 .datePicker {
   width: 100%;
