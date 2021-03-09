@@ -5,23 +5,7 @@ class ProfilesSerializer(serializers.ModelSerializer):
    class Meta:
        model = Profile
        fields = (
-           'id_user',
-           'is_admin',
-           'gender', 
-           'birth_date',
-           'first_name',
-           'last_name',
-           'phone',
-           'email',
-           'password',
-           'alert_stock',
-           'alert_price',
-           'alert_sms',
-           'alert_email',
-           'last_login',
-           'is_active',
-           'createdAt',
-           'token'
+           'token',
        )
 
 class RegisterSerializer(serializers.ModelSerializer):

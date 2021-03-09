@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
 import DatePicker, { registerLocale } from  "react-datepicker";
 import fr from 'date-fns/locale/fr';
+import {Alert} from 'react-bootstrap';
 
 import ProfilesService from  '../API/ProfilesService'
 import { useAuth } from "../Tracking/Auth";
@@ -28,13 +29,14 @@ function Register() {
     const [errorPwd, setErrorPwd] = useState(false);
     const [errorMessageEmail, setErrorMessageEmail] = useState("");
     const [errorMessagePwd, setErrorMessagePwd] = useState("");
+    const [show, setShow] = useState(false);
     const { setToken, token} = useAuth();
 
     if (token) {
       return <Redirect to={"/myaccount"} />;
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
       e.preventDefault();
       
       // vérification des emails entrées 
@@ -93,36 +95,63 @@ function Register() {
       if (!errorPwd) {
         setErrorMessagePwd("");
       }
-
-      // Formatage Date 
-      var jour = birthDate.getDate().toString(); 
-      if (jour.length === 1) {
-        jour = "0" + jour;
+      if (!errorMail) {
+        setErrorMessageEmail("");
       }
-      var mois = (birthDate.getMonth()+1).toString();
-      if (mois.length === 1) {
-        mois = "0" + mois;
-      }
-      var annee = birthDate.getFullYear().toString(); 
-      const date = annee+'-'+mois+'-'+jour
 
-      // Requete API 
-      profilesService.register({
-        "gender": gender,
-        "birth_date": date,
-        "first_name": firstName,
-        "last_name": lastName,
-        "email": email,
-        "password": password
-    })
+      if (!errorPwd && !errorMail) {
+        // Formatage Date 
+        var jour = birthDate.getDate().toString(); 
+        if (jour.length === 1) {
+          jour = "0" + jour;
+        }
+        var mois = (birthDate.getMonth()+1).toString();
+        if (mois.length === 1) {
+          mois = "0" + mois;
+        }
+        var annee = birthDate.getFullYear().toString(); 
+        const date = annee+'-'+mois+'-'+jour
+
+        // Requete API 
+        profilesService.register({
+          "gender": gender,
+          "birth_date": date,
+          "first_name": firstName,
+          "last_name": lastName,
+          "email": email,
+          "password": password
+        }).then((result)=>{
+          setToken({token: result.data.token});
+          setLoggedIn(true);
+        }).catch(()=>{ 
+          setShow(true)
+        });
+      }
     }
 
     if (isLoggedIn) {
       return <Redirect to={"/myaccount"} />;
     }
 
+    function AlertDismissible() {
+      if (show) {
+        return (
+          <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+            <Alert.Heading>Oups, il semble qu'il y ait un problème !</Alert.Heading>
+            <p>
+              Un compte existe déjà avec cette adresse email !
+            </p>
+          </Alert>
+        );
+      }
+      else {
+        return(null)
+      }
+    }
+
     return (
       <body className="text-center">
+        <AlertDismissible/>
         <main className="form-register">
           <form onSubmit={handleSubmit} >
               <h1 className="h3 mb-3 fw-normal">Création de votre compte Fastocks</h1>

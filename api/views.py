@@ -29,6 +29,9 @@ def register(request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             Profile.objects.create_user(gender=request.data['gender'], birth_date=request.data['birth_date'], first_name=request.data['first_name'], last_name=request.data['last_name'], email=request.data['email'], password=request.data['password'])
+            user = django_authenticate(email=request.data['email'], password=request.data['password'])
+            django_login(user=user, request=request)
+            serializer = ProfilesSerializer(user,context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
