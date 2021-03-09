@@ -13,7 +13,8 @@ function Login() {
     const [password, setPassword] = useState("");
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [show, setShow] = useState(false);
-    const { setToken, token} = useAuth();
+    const [rememberMe, setRememberMe] = useState(false);
+    const { setSessionToken, setLocalToken, token} = useAuth();
 
     function AlertDismissibleExample() {
       if (show) {
@@ -41,7 +42,13 @@ function Login() {
         "email": email,
         "password": password
       }).then((result)=>{
-        setToken({token: result.data.token});
+        if (rememberMe) {
+          setLocalToken(result.data);
+          setSessionToken(result.data);
+        }
+        else {
+          setSessionToken(result.data);
+        }
         setLoggedIn(true);
       }).catch(()=>{ 
         setShow(true)
@@ -62,7 +69,7 @@ function Login() {
               <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => setPassword(e.target.value)}></input>
               <div className="checkbox mb-3">
                   <label>
-                    <input type="checkbox"></input>
+                    <input type="checkbox" onChange={e => setRememberMe(e.target.value)}></input>
                     {'\n'} Rester connecté 
                   </label>
               </div>

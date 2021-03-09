@@ -2,10 +2,11 @@ import { useAuth } from "../Tracking/Auth";
 import React from 'react';
 
 function ProfileHome () {
-  const { setToken } = useAuth();
+  const { setLocalToken, setSessionToken } = useAuth();
 
   function logOut() {
-    setToken(false);
+    setSessionToken(false);
+    setLocalToken(false);
   }
 
   return (

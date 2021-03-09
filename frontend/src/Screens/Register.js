@@ -121,7 +121,7 @@ function Register() {
           "email": email,
           "password": password
         }).then((result)=>{
-          setToken({token: result.data.token});
+          setToken(result.data.token);
           setLoggedIn(true);
         }).catch(()=>{ 
           setShow(true)

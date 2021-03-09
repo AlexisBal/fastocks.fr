@@ -19,7 +19,7 @@ import './App.css';
 // Nav Bar 
 const Header = props => {
   const { location } = props;
-  const { token} = useAuth();
+  const { token } = useAuth();
   var displayNavPublic = false;
   var displayNavPrivate = true;
   if (token) {
@@ -58,9 +58,9 @@ const BaseLayout = () => (
 
 // App
 function App() {
-  const { token, setToken } = useToken();
+  const {setLocalToken, setSessionToken, token } = useToken();
   return (
-    <AuthContext.Provider value={{token, setToken }}>
+    <AuthContext.Provider value={{setLocalToken, setSessionToken, token }}>
       <Router>
         <BaseLayout/>
       </Router>
