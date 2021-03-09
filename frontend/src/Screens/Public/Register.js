@@ -4,8 +4,8 @@ import DatePicker, { registerLocale } from  "react-datepicker";
 import fr from 'date-fns/locale/fr';
 import {Alert} from 'react-bootstrap';
 
-import ProfilesService from  '../API/ProfilesService'
-import { useAuth } from "../Tracking/Auth";
+import ProfilesService from  '../../API/ProfilesService'
+import { useAuth } from "../../Tracking/Auth";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -175,6 +175,7 @@ function Register() {
                locale={"fr"}
                dateFormat="dd/MM/yyyy"
                selected={birthDate} 
+               
                onChange={date => setBirthDate(date)}/>
               <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
               <input type="text" id="firstname" className="form-control" placeholder="Prénom" required onChange={e => setFirstName(e.target.value)}></input>

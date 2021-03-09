@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
 import {Alert} from 'react-bootstrap';
 
-import ProfilesService from  '../API/ProfilesService'
-import { useAuth } from "../Tracking/Auth";
+import ProfilesService from  '../../API/ProfilesService'
+import { useAuth } from "../../Tracking/Auth";
 
 
 const profilesService = new ProfilesService();

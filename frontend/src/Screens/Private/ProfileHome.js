@@ -1,4 +1,4 @@
-import { useAuth } from "../Tracking/Auth";
+import { useAuth } from "../../Tracking/Auth";
 import React from 'react';
 
 function ProfileHome () {
