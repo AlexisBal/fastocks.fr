@@ -6,7 +6,13 @@ class ProfilesSerializer(serializers.ModelSerializer):
        model = Profile
        fields = (
            'token',
-           'id_user'
+           'id_user', 
+           'first_name',
+           'phone',
+           'alert_stock',
+           'alert_price',
+           'alert_sms',
+           'alert_email',
        )
 
 class RegisterSerializer(serializers.ModelSerializer):

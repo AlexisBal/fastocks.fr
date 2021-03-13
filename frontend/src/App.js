@@ -8,7 +8,7 @@ import { withRouter } from "react-router";
 import PrivateRoute from './Tracking/PrivateRoute';
 import { AuthContext } from "./Tracking/Auth";
 import useToken from './Tracking/UseToken';
-import useId from "./Tracking/UseId";
+import Informations from "./Tracking/Informations";
 
 import Login from './Screens/Public/Login';
 import Register from './Screens/Public/Register';
@@ -70,10 +70,10 @@ const PrivateHeaderWithRouter = withRouter(PrivateHeader);
 // App
 function App() {
   const {setLocalToken, setSessionToken, token } = useToken();
-  const {setLocalId, setSessionId, id } = useId();
+  const {setLocalInformations, setSessionInformations, id } = Informations();
 
   return (
-    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalId, setSessionId, id }}>
+    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id }}>
       <Router>
         <PublicHeaderWithRouter token={token}/>
         <PrivateHeaderWithRouter token={token}/>

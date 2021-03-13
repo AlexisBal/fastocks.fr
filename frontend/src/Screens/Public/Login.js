@@ -14,7 +14,7 @@ function Login() {
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [show, setShow] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const { setLocalToken, setSessionToken, token, setLocalId, setSessionId } = useAuth();
+    const { setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations } = useAuth();
 
     function AlertDismissibleExample() {
       if (show) {
@@ -45,12 +45,36 @@ function Login() {
         if (rememberMe) {
           setLocalToken({token: result.data.token});
           setSessionToken({token: result.data.token});
-          setLocalId({id: result.data.id_user})
-          setSessionId({id: result.data.id_user})
+          setLocalInformations({
+            id: {id: result.data.id_user},
+            first_name: {first_name: result.data.first_name},
+            phone: {phone: result.data.phone},
+            alert_stock: {alert_stock: result.data.alert_stock},
+            alert_price: {alert_price: result.data.alert_price},
+            alert_sms: {alert_sms: result.data.alert_sms},
+            alert_email: {alert_email: result.data.alert_email}
+          })
+          setSessionInformations({
+            id: {id: result.data.id_user},
+            first_name: {first_name: result.data.first_name},
+            phone: {phone: result.data.phone},
+            alert_stock: {alert_stock: result.data.alert_stock},
+            alert_price: {alert_price: result.data.alert_price},
+            alert_sms: {alert_sms: result.data.alert_sms},
+            alert_email: {alert_email: result.data.alert_email}
+          })
         }
         else {
           setSessionToken({token: result.data.token});
-          setSessionId({id: result.data.id_user})
+          setSessionInformations({
+            id: {id: result.data.id_user},
+            first_name: {first_name: result.data.first_name},
+            phone: {phone: result.data.phone},
+            alert_stock: {alert_stock: result.data.alert_stock},
+            alert_price: {alert_price: result.data.alert_price},
+            alert_sms: {alert_sms: result.data.alert_sms},
+            alert_email: {alert_email: result.data.alert_email}
+          })
         }
         setLoggedIn(true);
       }).catch(()=>{ 

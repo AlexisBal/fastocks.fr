@@ -2,13 +2,30 @@ import { useAuth } from "../../Tracking/Auth";
 import React from 'react';
 
 function ProfileHome () {
-  const { setLocalToken, setSessionToken, setSessionId, setLocalId } = useAuth();
+  const { setLocalToken, setSessionToken, setSessionInformations, setLocalInformations } = useAuth();
 
   function logOut() {
     setSessionToken(false);
     setLocalToken(false);
-    setSessionId(false);
-    setLocalId(false);
+    setSessionInformations({
+      id: false,
+      first_name: false,
+      phone: false,
+      alert_stock: false,
+      alert_price: false,
+      alert_sms: false,
+      alert_email: false
+    });
+
+    setLocalInformations({
+      id: false,
+      first_name: false,
+      phone: false,
+      alert_stock: false,
+      alert_price: false,
+      alert_sms: false,
+      alert_email: false
+    })
   }
 
   return (
