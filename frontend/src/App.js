@@ -38,6 +38,7 @@ const PublicHeader = props => {
           <Nav.Link href="/">Accueil</Nav.Link>
           <Nav.Link href="/login">Se connecter</Nav.Link>
           <Nav.Link href="/register">S'inscrire</Nav.Link>
+          
       </Nav>
       </Navbar.Collapse>
   </Navbar>
@@ -55,12 +56,20 @@ const PrivateHeader = props => {
     <Navbar collapseOnSelect className='PrivateNavBar' fixed="top" expand={true} bg="light">
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
-      <Nav activeKey={location.pathname} className="mr-auto">
-          <Nav.Link href="/myaccount">Accueil</Nav.Link>
-          <Nav.Link href="/myaccount/monitor">Dashboard</Nav.Link>
-          <Nav.Link href="/myaccount/new-monitoring">Nouveau suivi</Nav.Link>
+        <Nav activeKey={location.pathname} className="mr-auto">
+          <Nav.Item>
+            <Nav.Link href="/myaccount">Accueil</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/myaccount/monitor">Dashboard</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/myaccount/new-monitoring">Nouveau suivi</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
           <Nav.Link href="/myaccount/settings">Réglages</Nav.Link>
-      </Nav>
+          </Nav.Item>
+        </Nav>
       </Navbar.Collapse>
   </Navbar>
   );
@@ -70,10 +79,10 @@ const PrivateHeaderWithRouter = withRouter(PrivateHeader);
 // App
 function App() {
   const {setLocalToken, setSessionToken, token } = useToken();
-  const {setLocalInformations, setSessionInformations, id } = Informations();
+  const {setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock } = Informations();
 
   return (
-    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id }}>
+    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock }}>
       <Router>
         <PublicHeaderWithRouter token={token}/>
         <PrivateHeaderWithRouter token={token}/>

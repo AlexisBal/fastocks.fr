@@ -95,10 +95,8 @@ function Login() {
               <input type="email" id="email" className="form-control" placeholder="Adresse email" required autoFocus onChange={e => setEmail(e.target.value)}></input>
               <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => setPassword(e.target.value)}></input>
               <div className="checkbox mb-3">
-                  <label>
-                    <input type="checkbox" onChange={e => setRememberMe(e.target.value)}></input>
-                    {'\n'} Rester connecté 
-                  </label>
+                    <input className="form-check-input" type="checkbox"  id="flexCheckDefault" onChange={e => setRememberMe(e.target.value)}></input>
+                    <label className="form-check-label" for="flexCheckDefault">Rester connecté</label>
               </div>
               <button className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Connexion</button>
           </form>

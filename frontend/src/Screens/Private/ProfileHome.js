@@ -1,5 +1,6 @@
-import { useAuth } from "../../Tracking/Auth";
 import React from 'react';
+
+import { useAuth } from "../../Tracking/Auth";
 
 function ProfileHome () {
   const { setLocalToken, setSessionToken, setSessionInformations, setLocalInformations } = useAuth();

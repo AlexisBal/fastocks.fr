@@ -110,6 +110,43 @@ body {
   width: 100%;
 }
 
+.form-settings {
+  width: 60%;
+  padding: 30px;
+  margin: auto;
+}
+.form-settings .checkbox {
+  font-weight: 400;
+}
+.form-settings .form-control {
+  position: relative;
+  box-sizing:border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-settings .form-control:focus {
+  z-index: 2;
+}
+.form-settings #password {
+  margin-bottom: 10px;
+}
+.form-settings #new-password {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-settings #new-password-confirm {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-bottom: 20px;
+}
+.form-settings .change-password {
+  background-color: rgba(231, 231, 231, 0.336);
+  padding: 20px;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
