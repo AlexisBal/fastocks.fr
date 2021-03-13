@@ -5,10 +5,11 @@ import {
 import { Navbar, Nav } from 'react-bootstrap';
 import { withRouter } from "react-router";
 
-import ProfileCreateUpdate  from './API/ProfileCreateUpdate'
 import PrivateRoute from './Tracking/PrivateRoute';
-import { AuthContext, useAuth } from "./Tracking/Auth";
+import { AuthContext } from "./Tracking/Auth";
 import useToken from './Tracking/UseToken';
+import useId from "./Tracking/UseId";
+
 import Login from './Screens/Public/Login';
 import Register from './Screens/Public/Register';
 import Home from './Screens/Public/Home';
@@ -16,64 +17,78 @@ import ProfileHome from './Screens/Private/ProfileHome';
 import CreationSuivi from './Screens/Private/CreationSuivi';
 import Dashboard from './Screens/Private/Dashboard';
 import ParametresSuivi from "./Screens/Private/ParametresSuivi";
-import Reglages from './Screens/Private/Reglages'
+import Reglages from './Screens/Private/Reglages';
+import ChangePassword from './Screens/Private/ChangePassword';
+
 import './App.css';
 
 
-// Nav Bar 
-const Header = props => {
-  const { location } = props;
-  const { token } = useAuth();
-  var displayNavPublic = false;
-  var displayNavPrivate = true;
-  if (token) {
-    displayNavPublic = true;
-    displayNavPrivate = false;
-  }
+// Public Header
+const PublicHeader = props => {
+  const { location, token } = props;
+
+  if (token) return null;
+  
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+    <Navbar collapseOnSelect className='PublicNavBar' fixed="top" expand={true} bg="light">
       <Navbar.Brand >Fastocks</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
       <Nav activeKey={location.pathname} className="mr-auto">
-          <Nav.Link href="/" hidden={displayNavPublic}>Accueil</Nav.Link>
-          <Nav.Link href="/login" hidden={displayNavPublic}>Se connecter</Nav.Link>
-          <Nav.Link href="/register" hidden={displayNavPublic}>S'inscrire</Nav.Link>
-          <Nav.Link href="/myaccount" hidden={displayNavPrivate}>Accueil</Nav.Link>
-          <Nav.Link href="/myaccount/settings" hidden={displayNavPrivate}>Réglages</Nav.Link>
+          <Nav.Link href="/">Accueil</Nav.Link>
+          <Nav.Link href="/login">Se connecter</Nav.Link>
+          <Nav.Link href="/register">S'inscrire</Nav.Link>
       </Nav>
       </Navbar.Collapse>
   </Navbar>
   );
 };
-const HeaderWithRouter = withRouter(Header);
+const PublicHeaderWithRouter = withRouter(PublicHeader);
 
-// Router
-const BaseLayout = () => (
-  <div className="container-fluid">  
-      <HeaderWithRouter />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/login" component={Login} />
-      <Route exact path='/register' component={Register}/>
-      <Route path="/profile/:pk" component={ProfileCreateUpdate} />
-      <Route exact path="/profile/" component={ProfileCreateUpdate} />
-      <PrivateRoute exact path="/myaccount" component={ProfileHome} />
-      <PrivateRoute path="/myaccount/settings" component={Reglages} />
-      <PrivateRoute path="/myaccount/settings/change-password" component={Reglages} />
-      <PrivateRoute path="/myaccount/new-monitoring " component={CreationSuivi} />
-      <PrivateRoute path="/myaccount/monitor" component={Dashboard} />
-      <PrivateRoute path="/myaccount/monitor/:id" component={Dashboard} />
-      <PrivateRoute path="/myaccount/monitor/:id/settings" component={ParametresSuivi} />
-  </div>
-)
+// Private Header 
+const PrivateHeader = props => {
+  const { location, token } = props;
+
+  if (!token) return null;
+  
+  return (
+    <Navbar collapseOnSelect className='PrivateNavBar' fixed="top" expand={true} bg="light">
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav activeKey={location.pathname} className="mr-auto">
+          <Nav.Link href="/myaccount">Accueil</Nav.Link>
+          <Nav.Link href="/myaccount/monitor">Dashboard</Nav.Link>
+          <Nav.Link href="/myaccount/new-monitoring">Nouveau suivi</Nav.Link>
+          <Nav.Link href="/myaccount/settings">Réglages</Nav.Link>
+      </Nav>
+      </Navbar.Collapse>
+  </Navbar>
+  );
+};
+const PrivateHeaderWithRouter = withRouter(PrivateHeader);
 
 // App
 function App() {
   const {setLocalToken, setSessionToken, token } = useToken();
+  const {setLocalId, setSessionId, id } = useId();
+
   return (
-    <AuthContext.Provider value={{setLocalToken, setSessionToken, token }}>
+    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalId, setSessionId, id }}>
       <Router>
-        <BaseLayout/>
+        <PublicHeaderWithRouter token={token}/>
+        <PrivateHeaderWithRouter token={token}/>
+        <div className="container-fluid">  
+          <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path='/register' component={Register}/>
+          <PrivateRoute exact path="/myaccount" component={ProfileHome} />
+          <PrivateRoute exact path="/myaccount/settings" component={Reglages} />
+          <PrivateRoute exact path="/myaccount/settings/change-password" component={ChangePassword} />
+          <PrivateRoute exact path="/myaccount/new-monitoring " component={CreationSuivi} />
+          <PrivateRoute exact path="/myaccount/monitor" component={Dashboard} />
+          <PrivateRoute path="/myaccount/monitor/:id" component={Dashboard} />
+          <PrivateRoute path="/myaccount/monitor/:id/settings" component={ParametresSuivi} />
+        </div>
       </Router>
     </AuthContext.Provider>
   );

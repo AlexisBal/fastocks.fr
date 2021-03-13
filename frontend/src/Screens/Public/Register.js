@@ -30,7 +30,7 @@ function Register() {
     const [errorMessageEmail, setErrorMessageEmail] = useState("");
     const [errorMessagePwd, setErrorMessagePwd] = useState("");
     const [show, setShow] = useState(false);
-    const { setToken, token} = useAuth();
+    const { setSessionToken, token,  setSessionId } = useAuth();
 
     if (token) {
       return <Redirect to={"/myaccount"} />;
@@ -121,7 +121,8 @@ function Register() {
           "email": email,
           "password": password
         }).then((result)=>{
-          setToken(result.data.token);
+          setSessionToken({token: result.data.token});
+          setSessionId({id: result.data.id_user})
           setLoggedIn(true);
         }).catch(()=>{ 
           setShow(true)

@@ -6,6 +6,7 @@ class ProfilesSerializer(serializers.ModelSerializer):
        model = Profile
        fields = (
            'token',
+           'id_user'
        )
 
 class RegisterSerializer(serializers.ModelSerializer):

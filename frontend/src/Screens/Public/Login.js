@@ -14,7 +14,7 @@ function Login() {
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [show, setShow] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const { setSessionToken, setLocalToken, token} = useAuth();
+    const { setLocalToken, setSessionToken, token, setLocalId, setSessionId } = useAuth();
 
     function AlertDismissibleExample() {
       if (show) {
@@ -43,11 +43,14 @@ function Login() {
         "password": password
       }).then((result)=>{
         if (rememberMe) {
-          setLocalToken(result.data);
-          setSessionToken(result.data);
+          setLocalToken({token: result.data.token});
+          setSessionToken({token: result.data.token});
+          setLocalId({id: result.data.id_user})
+          setSessionId({id: result.data.id_user})
         }
         else {
-          setSessionToken(result.data);
+          setSessionToken({token: result.data.token});
+          setSessionId({id: result.data.id_user})
         }
         setLoggedIn(true);
       }).catch(()=>{ 

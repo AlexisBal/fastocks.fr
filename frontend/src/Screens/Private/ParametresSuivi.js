@@ -3,9 +3,9 @@ import React from 'react';
 function ParametresSuivi () {
     
   return (
-    <div>
+    <body>
       <div>Paramètres du suivi</div>
-    </div>
+    </body>
   );
 }
 

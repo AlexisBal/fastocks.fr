@@ -3,9 +3,9 @@ import React from 'react';
 function Reglages () {
     
   return (
-    <div>
+    <body>
       <div>Réglages</div>
-    </div>
+    </body>
   );
 }
 

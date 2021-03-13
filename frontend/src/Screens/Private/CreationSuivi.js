@@ -3,9 +3,9 @@ import React from 'react';
 function CreationSuivi () {
     
   return (
-    <div>
+    <body>
       <div>Nouveau suivi</div>
-    </div>
+    </body>
   );
 }
 

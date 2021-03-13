@@ -10,6 +10,14 @@ body {
   position: relative;
 }
 
+.PublicNavBar {
+  height:fit-content;
+}
+
+.PrivateNavBar {
+  height:fit-content;
+}
+
 .form-signin {
   width: 100%;
   max-width: 330px;

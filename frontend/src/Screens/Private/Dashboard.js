@@ -3,9 +3,9 @@ import React from 'react';
 function Dashboard () {
     
   return (
-    <div>
+    <body>
       <div>Suivis en cour</div>
-    </div>
+    </body>
   );
 }
 
