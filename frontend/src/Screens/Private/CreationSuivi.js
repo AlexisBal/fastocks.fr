@@ -4,7 +4,11 @@ function CreationSuivi () {
     
   return (
     <body>
-      <div>Nouveau suivi</div>
+      <div className='safe-container'>
+        <h1>Nouveau Suivi</h1>
+        <main className="form-settings"> 
+        </main>
+      </div>
     </body>
   );
 }

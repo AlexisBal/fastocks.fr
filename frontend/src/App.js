@@ -53,9 +53,9 @@ const PrivateHeader = props => {
   if (!token) return null;
   
   return (
-    <Navbar collapseOnSelect className='PrivateNavBar' fixed="top" expand={true} bg="light">
+    <Navbar collapseOnSelect className='PrivateNavBar' fixed="top" expand={true} variant='light'>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-      <Navbar.Collapse id="responsive-navbar-nav">
+      <Navbar.Collapse >
         <Nav activeKey={location.pathname} className="mr-auto">
           <Nav.Item>
             <Nav.Link href="/myaccount">Accueil</Nav.Link>
@@ -82,24 +82,24 @@ function App() {
   const {setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock } = Informations();
 
   return (
-    <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock }}>
-      <Router>
-        <PublicHeaderWithRouter token={token}/>
-        <PrivateHeaderWithRouter token={token}/>
-        <div className="container-fluid">  
+    <div className="Main">
+      <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock }}>
+        <Router>
+          <PublicHeaderWithRouter token={token}/>
+          <PrivateHeaderWithRouter token={token}/>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path='/register' component={Register}/>
           <PrivateRoute exact path="/myaccount" component={ProfileHome} />
           <PrivateRoute exact path="/myaccount/settings" component={Reglages} />
           <PrivateRoute exact path="/myaccount/settings/change-password" component={ChangePassword} />
-          <PrivateRoute exact path="/myaccount/new-monitoring " component={CreationSuivi} />
+          <PrivateRoute exact path="/myaccount/new-monitoring" component={CreationSuivi} />
           <PrivateRoute exact path="/myaccount/monitor" component={Dashboard} />
           <PrivateRoute path="/myaccount/monitor/:id" component={Dashboard} />
           <PrivateRoute path="/myaccount/monitor/:id/settings" component={ParametresSuivi} />
-        </div>
-      </Router>
-    </AuthContext.Provider>
+        </Router>
+      </AuthContext.Provider>
+    </div>
   );
 }
 

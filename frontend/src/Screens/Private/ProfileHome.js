@@ -31,8 +31,12 @@ function ProfileHome () {
 
   return (
     <body>
-      <div>Admin Page</div>
-      <button className="w-100 btn btn-lg btn-primary" onClick={logOut}>Log out</button>
+      <div className='safe-container'>
+        <h1>Accueil</h1>
+        <main className="form-settings">
+           <button className="w-100 btn btn-lg btn-primary" onClick={logOut}>Log out</button>
+        </main>
+      </div>
     </body>
   );
 }

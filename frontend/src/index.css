@@ -1,9 +1,21 @@
 body {
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #f5f5f5;
+  height: auto;
+  background-color:rgba(231, 231, 231, 0.336);
 }
+html {
+  background-color:rgba(231, 231, 231, 0.336);
+}
+h1 {
+  padding-top: 40px;
+}
+
+.safe-container {
+  align-items: center;
+  padding: 40px;
+  background-color: rgba(231, 231, 231, 0.336);
+}
+
 
 .error {
   color: red;
@@ -16,6 +28,7 @@ body {
 
 .PrivateNavBar {
   height:fit-content;
+  background-color: white;
 }
 
 .form-signin {
@@ -111,9 +124,11 @@ body {
 }
 
 .form-settings {
-  width: 60%;
-  padding: 30px;
-  margin: auto;
+  width: 100%;
+  position: relative;
+  align-items: center;
+  height: auto;
+  margin-top: auto;
 }
 .form-settings .checkbox {
   font-weight: 400;
@@ -126,7 +141,7 @@ body {
   font-size: 16px;
 }
 .form-settings .form-control:focus {
-  z-index: 2;
+  z-index:2;
 }
 .form-settings #password {
   margin-bottom: 10px;
@@ -142,10 +157,8 @@ body {
   margin-bottom: 20px;
 }
 .form-settings .change-password {
-  background-color: rgba(231, 231, 231, 0.336);
   padding: 20px;
 }
-
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

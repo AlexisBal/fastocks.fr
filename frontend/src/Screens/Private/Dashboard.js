@@ -4,7 +4,11 @@ function Dashboard () {
     
   return (
     <body>
-      <div>Suivis en cour</div>
+      <div className='safe-container'>
+        <h1>Dashboard</h1>
+        <main className="form-settings"> 
+        </main>
+      </div>
     </body>
   );
 }
