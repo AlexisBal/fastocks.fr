@@ -87,20 +87,20 @@ function Login() {
     }
 
     return (
-      <body className="text-center">
+      <body>
         <div className='safe-container'>
-          <AlertDismissibleExample/>
-          <main className="form-signin">
-            <form onSubmit={handleSubmit} >
+          <AlertDismissibleExample className="alert"/>
+          <main className="form-signin text-center">
+            <form onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 fw-normal">Merci de vous connecter</h1>
                 <input type="email" id="email" className="form-control" placeholder="Adresse email" required autoFocus onChange={e => setEmail(e.target.value)}></input>
                 <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => setPassword(e.target.value)}></input>
-                <div className="checkbox mb-3">
+                <div className="checkbox mb-3" >
                       <input className="form-check-input" type="checkbox"  id="flexCheckDefault" onChange={e => setRememberMe(e.target.value)}></input>
                       <label className="form-check-label" for="flexCheckDefault">Rester connecté</label>
                 </div>
-                <button className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Connexion</button>
-              </form>
+                <button className="w-100 btn btn-lg btn-primary submit" type="submit" value="submit">Connexion</button>
+            </form>
           </main>
         </div>
     </body>
