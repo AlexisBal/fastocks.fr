@@ -30,16 +30,21 @@ const PublicHeader = props => {
   if (token) return null;
   
   return (
-    <Navbar collapseOnSelect className='PublicNavBar' fixed="top" expand={true} bg="light">
+    <Navbar collapseOnSelect className='PublicNavBar' fixed="top" expand={true} variant='light'>
       <Navbar.Brand >Fastocks</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
-      <Nav activeKey={location.pathname} className="mr-auto">
-          <Nav.Link href="/">Accueil</Nav.Link>
-          <Nav.Link href="/login">Se connecter</Nav.Link>
-          <Nav.Link href="/register">S'inscrire</Nav.Link>
-          
-      </Nav>
+        <Nav activeKey={location.pathname} className="mr-auto">
+          <Nav.Item>
+            <Nav.Link href="/">Accueil</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/login">Se connecter</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/register">S'inscrire</Nav.Link>
+          </Nav.Item>
+        </Nav>
       </Navbar.Collapse>
   </Navbar>
   );
@@ -95,8 +100,8 @@ function App() {
           <PrivateRoute exact path="/myaccount/settings/change-password" component={ChangePassword} />
           <PrivateRoute exact path="/myaccount/new-monitoring" component={CreationSuivi} />
           <PrivateRoute exact path="/myaccount/monitor" component={Dashboard} />
-          <PrivateRoute path="/myaccount/monitor/:id" component={Dashboard} />
-          <PrivateRoute path="/myaccount/monitor/:id/settings" component={ParametresSuivi} />
+          <PrivateRoute exact path="/myaccount/monitor/:id" component={Dashboard} />
+          <PrivateRoute exact path="/myaccount/monitor/:id/settings" component={ParametresSuivi} />
         </Router>
       </AuthContext.Provider>
     </div>

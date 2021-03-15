@@ -160,44 +160,46 @@ function Register() {
 
     return (
       <body className="text-center">
-        <AlertDismissible/>
-        <main className="form-register">
-          <form onSubmit={handleSubmit} >
-              <h1 className="h3 mb-3 fw-normal">Création de votre compte Fastocks</h1>
-              <div className="gender" autoFocus onChange={e => setGender(e.target.value)}>
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value='F' required></input>
-                    <label className="form-check-label" for="inlineRadio1">Madame</label>
+        <div className='safe-container'>
+          <AlertDismissible/>
+          <main className="form-register">
+            <form onSubmit={handleSubmit} >
+                <h1 className="h3 mb-3 fw-normal">Création de votre compte Fastocks</h1>
+                <div className="gender" autoFocus onChange={e => setGender(e.target.value)}>
+                  <div className="form-check form-check-inline">
+                      <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value='F' required></input>
+                      <label className="form-check-label" for="inlineRadio1">Madame</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                      <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value='M' required></input>
+                      <label className="form-check-label" for="inlineRadio2">Monsieur</label>
+                  </div>
                 </div>
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value='M' required></input>
-                    <label className="form-check-label" for="inlineRadio2">Monsieur</label>
-                </div>
-              </div>
-              <DatePicker 
-               required
-               popperPlacement="auto"
-               wrapperClassName="datePicker" 
-               className="form-control" 
-               id="birthdate" 
-               placeholderText='Date de naissance (JJ/MM/AAAA)' 
-               locale={"fr"}
-               dateFormat="dd/MM/yyyy"
-               selected={birthDate} 
-               
-               onChange={date => setBirthDate(date)}/>
-              <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
-              <input type="text" id="firstname" className="form-control" placeholder="Prénom" required onChange={e => setFirstName(e.target.value)}></input>
-              <input type="email" id="email" className="form-control" placeholder="Adresse email" autoComplete="on" required  onChange={e => [setEmail(e.target.value), setErrorMessageEmail("")]}></input>
-              <input type="email" id="email-confirm" className="form-control" placeholder="Confirmation de l'adresse email" required onChange={e => [setEmailConfirm(e.target.value), setErrorMessageEmail("")]}></input>
-              {errorMessageEmail}
-              <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => [setPassword(e.target.value), setErrorMessagePwd("")]}></input>
-              <input type="password" id="password-confirm" className="form-control" placeholder="Confirmation du mot de passe" required onChange={e => [setPasswordConfirm(e.target.value), setErrorMessagePwd("")]}></input>
-              {errorMessagePwd}
-              <button id="register-confirm" className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Inscription</button>
-          </form>
-      </main>
-    </body>
+                <DatePicker 
+                required
+                popperPlacement="auto"
+                wrapperClassName="datePicker" 
+                className="form-control" 
+                id="birthdate" 
+                placeholderText='Date de naissance (JJ/MM/AAAA)' 
+                locale={"fr"}
+                dateFormat="dd/MM/yyyy"
+                selected={birthDate} 
+                
+                onChange={date => setBirthDate(date)}/>
+                <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
+                <input type="text" id="firstname" className="form-control" placeholder="Prénom" required onChange={e => setFirstName(e.target.value)}></input>
+                <input type="email" id="email" className="form-control" placeholder="Adresse email" autoComplete="on" required  onChange={e => [setEmail(e.target.value), setErrorMessageEmail("")]}></input>
+                <input type="email" id="email-confirm" className="form-control" placeholder="Confirmation de l'adresse email" required onChange={e => [setEmailConfirm(e.target.value), setErrorMessageEmail("")]}></input>
+                {errorMessageEmail}
+                <input type="password" id="password" className="form-control" placeholder="Mot de passe" required onChange={e => [setPassword(e.target.value), setErrorMessagePwd("")]}></input>
+                <input type="password" id="password-confirm" className="form-control" placeholder="Confirmation du mot de passe" required onChange={e => [setPasswordConfirm(e.target.value), setErrorMessagePwd("")]}></input>
+                {errorMessagePwd}
+                <button id="register-confirm" className="w-100 btn btn-lg btn-primary" type="submit" value="submit">Inscription</button>
+             </form>
+          </main>
+        </div>
+      </body>
     );
 }  
 

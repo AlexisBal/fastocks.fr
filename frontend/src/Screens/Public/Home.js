@@ -4,8 +4,12 @@ class Home extends Component {
       render() {
         return (
           <body>
-            <h1> Bienvenue sur Fastocks.fr !</h1>
-          </body>
+           <div className='safe-container'>
+            <h1>Accueil</h1>
+            <main className="form-settings"> 
+            </main>
+          </div>
+        </body>
        );
       }  
 }

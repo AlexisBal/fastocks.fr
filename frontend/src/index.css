@@ -4,6 +4,7 @@ body {
   background-color:rgba(231, 231, 231, 0.336);
 }
 html {
+  align-items: center;
   background-color:rgba(231, 231, 231, 0.336);
 }
 h1 {
@@ -24,6 +25,7 @@ h1 {
 
 .PublicNavBar {
   height:fit-content;
+  background-color: white;
 }
 
 .PrivateNavBar {
@@ -32,7 +34,6 @@ h1 {
 }
 
 .form-signin {
-  width: 100%;
   max-width: 330px;
   padding: 15px;
   margin: auto;
