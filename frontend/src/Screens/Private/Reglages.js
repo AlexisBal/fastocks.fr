@@ -13,7 +13,6 @@ function Reglages () {
         <h1>Réglages</h1>
         <main className="form-settings">
           <form className="text-center">
-            <Button variant="outline-primary">Modifier le mot de passe</Button>
           </form>
         </main>
       </div>

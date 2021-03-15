@@ -139,6 +139,7 @@ h1 {
 .form-register #register-confirm {
   margin-top: 20px;
 }
+
 .datePicker {
   width: 100%;
 }
@@ -150,9 +151,6 @@ h1 {
   height: auto;
   margin-top: auto;
 }
-.form-settings .checkbox {
-  font-weight: 400;
-}
 .form-settings .form-control {
   position: relative;
   box-sizing:border-box;
@@ -163,21 +161,38 @@ h1 {
 .form-settings .form-control:focus {
   z-index:2;
 }
-.form-settings #password {
+
+.form-change-password {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  padding: 20px;
+  margin: auto;
+  transform: translate(-50%, -50%);
+}
+.form-change-password .form-control {
+  position: relative;
+  box-sizing:border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-change-password .form-control:focus {
+  z-index:2;
+}
+.form-change-password #password {
   margin-bottom: 10px;
 }
-.form-settings #new-password {
+.form-change-password #new-password {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-settings #new-password-confirm {
+.form-change-password #new-password-confirm {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   margin-bottom: 20px;
-}
-.form-settings .change-password {
-  padding: 20px;
 }
 
 code {

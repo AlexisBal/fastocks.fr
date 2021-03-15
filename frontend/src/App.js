@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router,
   Route
 } from "react-router-dom";
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { withRouter } from "react-router";
 
 import PrivateRoute from './Tracking/PrivateRoute';
@@ -53,15 +53,39 @@ const PublicHeaderWithRouter = withRouter(PublicHeader);
 
 // Private Header 
 const PrivateHeader = props => {
-  const { location, token } = props;
+  const { location, token, setSessionToken, setLocalToken, setSessionInformations, setLocalInformations} = props;
 
   if (!token) return null;
+
+  function logOut() {
+    setSessionToken(false);
+    setLocalToken(false);
+    setSessionInformations({
+      id: false,
+      first_name: false,
+      phone: false,
+      alert_stock: false,
+      alert_price: false,
+      alert_sms: false,
+      alert_email: false
+    });
+
+    setLocalInformations({
+      id: false,
+      first_name: false,
+      phone: false,
+      alert_stock: false,
+      alert_price: false,
+      alert_sms: false,
+      alert_email: false
+    })
+  }
   
   return (
     <Navbar collapseOnSelect className='PrivateNavBar' fixed="top" expand={true} variant='light'>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse >
-        <Nav activeKey={location.pathname} className="mr-auto">
+        <Nav activeKey={location.pathname} className="mr-auto ">
           <Nav.Item>
             <Nav.Link href="/myaccount">Accueil</Nav.Link>
           </Nav.Item>
@@ -71,9 +95,15 @@ const PrivateHeader = props => {
           <Nav.Item>
             <Nav.Link href="/myaccount/new-monitoring">Nouveau suivi</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-          <Nav.Link href="/myaccount/settings">Réglages</Nav.Link>
-          </Nav.Item>
+          <NavDropdown  title="Mon compte" id="basic-nav-dropdown">
+            <NavDropdown.Item href="/myaccount/settings">Mes préférences</NavDropdown.Item>
+            <NavDropdown.Item href="/myaccount/settings/change-password">Changer mon mot de passe</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={logOut}>Déconnexion</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+        <Nav>
+          
         </Nav>
       </Navbar.Collapse>
   </Navbar>
@@ -91,7 +121,7 @@ function App() {
       <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock }}>
         <Router>
           <PublicHeaderWithRouter token={token}/>
-          <PrivateHeaderWithRouter token={token}/>
+          <PrivateHeaderWithRouter token={token} setLocalToken={setLocalToken} setSessionToken={setSessionToken} setLocalInformations={setLocalInformations} setSessionInformations={setSessionInformations}/>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path='/register' component={Register}/>
