@@ -89,7 +89,7 @@ function Login() {
     return (
       <body>
         <div className='safe-container'>
-          <AlertDismissibleExample className="alert"/>
+          <AlertDismissibleExample className="alert" />
           <main className="form-signin text-center">
             <form onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 fw-normal">Merci de vous connecter</h1>

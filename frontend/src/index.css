@@ -1,6 +1,7 @@
 
 html, body {
   height: auto;
+  width: auto;
   margin: 0;
   background-color:rgba(231, 231, 231, 0.336);
 }
@@ -10,8 +11,9 @@ h1 {
 }
 
 .alert {
-  position:absolute;
-  height:fit-content;
+  margin-top: 60px;
+  height: auto;
+  width: auto;
 }
 
 .safe-container {
