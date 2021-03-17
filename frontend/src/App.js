@@ -63,6 +63,8 @@ const PrivateHeader = props => {
     setSessionInformations({
       id: false,
       first_name: false,
+      last_name:false,
+      email: false,
       phone: false,
       alert_stock: false,
       alert_price: false,
@@ -73,6 +75,8 @@ const PrivateHeader = props => {
     setLocalInformations({
       id: false,
       first_name: false,
+      last_name:false,
+      email: false,
       phone: false,
       alert_stock: false,
       alert_price: false,
@@ -114,11 +118,11 @@ const PrivateHeaderWithRouter = withRouter(PrivateHeader);
 // App
 function App() {
   const {setLocalToken, setSessionToken, token } = useToken();
-  const {setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock } = Informations();
+  const {setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertEmail, alertSms, alertPrice, alertStock } = Informations();
 
   return (
     <div className="Main">
-      <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, phone, firstName, alertEmail, alertSms, alertPrice, alertStock }}>
+      <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertEmail, alertSms, alertPrice, alertStock }}>
         <Router>
           <PublicHeaderWithRouter token={token}/>
           <PrivateHeaderWithRouter token={token} setLocalToken={setLocalToken} setSessionToken={setSessionToken} setLocalInformations={setLocalInformations} setSessionInformations={setSessionInformations}/>

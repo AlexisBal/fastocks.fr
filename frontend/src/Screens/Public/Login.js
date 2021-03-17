@@ -48,6 +48,8 @@ function Login() {
           setLocalInformations({
             id: {id: result.data.id_user},
             first_name: {first_name: result.data.first_name},
+            last_name: {last_name: result.data.last_name},
+            email: {email: result.data.email},
             phone: {phone: result.data.phone},
             alert_stock: {alert_stock: result.data.alert_stock},
             alert_price: {alert_price: result.data.alert_price},
@@ -57,6 +59,8 @@ function Login() {
           setSessionInformations({
             id: {id: result.data.id_user},
             first_name: {first_name: result.data.first_name},
+            last_name: {last_name: result.data.last_name},
+            email: {email: result.data.email},
             phone: {phone: result.data.phone},
             alert_stock: {alert_stock: result.data.alert_stock},
             alert_price: {alert_price: result.data.alert_price},
@@ -69,6 +73,8 @@ function Login() {
           setSessionInformations({
             id: {id: result.data.id_user},
             first_name: {first_name: result.data.first_name},
+            last_name: {last_name: result.data.last_name},
+            email: {email: result.data.email},
             phone: {phone: result.data.phone},
             alert_stock: {alert_stock: result.data.alert_stock},
             alert_price: {alert_price: result.data.alert_price},

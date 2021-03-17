@@ -40,7 +40,7 @@ h1 {
   position:absolute;
   top: 50%;
   left: 50%;
-  width: 35%;
+  width: 30%;
   padding: 20px;
   margin: auto;
   transform: translate(-50%, -50%);
@@ -51,7 +51,6 @@ h1 {
   padding-top: 20px;
   font-size: 17px;
 }
-
 .form-signin .form-control {
   position: relative;
   box-sizing: border-box;
@@ -146,10 +145,13 @@ h1 {
 
 .form-settings {
   width: 100%;
-  position: relative;
-  align-items: center;
   height: auto;
+  padding: 60px;
   margin-top: auto;
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .form-settings .form-control {
   position: relative;
@@ -161,7 +163,25 @@ h1 {
 .form-settings .form-control:focus {
   z-index:2;
 }
+.form-settings #alert-mail {
+  background-color: white;
+  width: auto;
+  height: fit-content;
 
+}
+.form-settings #alert-phone {
+  padding: 20px;
+  margin-top: 60px;
+  background-color: white;
+}
+.alert-mail-logo {
+  vertical-align: middle;
+  background-color: black;
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  padding: 15px;
+}
 .form-change-password {
   position:absolute;
   top: 50%;
