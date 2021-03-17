@@ -145,13 +145,9 @@ h1 {
 
 .form-settings {
   width: 100%;
-  height: auto;
-  padding: 60px;
-  margin-top: auto;
-  position:absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 20px;
+  position:relative;
+
 }
 .form-settings .form-control {
   position: relative;
@@ -169,10 +165,11 @@ h1 {
   height: fit-content;
 
 }
-.form-settings #alert-phone {
-  padding: 20px;
+.form-settings #alert-sms {
   margin-top: 60px;
   background-color: white;
+  width: auto;
+  height: fit-content;
 }
 .alert-mail-logo {
   vertical-align: middle;
@@ -182,6 +179,15 @@ h1 {
   border-radius: 100px;
   padding: 15px;
 }
+.alert-sms-logo {
+  vertical-align: middle;
+  background-color: black;
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  padding: 15px;
+}
+
 .form-change-password {
   position:absolute;
   top: 50%;

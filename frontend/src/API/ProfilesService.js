@@ -13,6 +13,11 @@ export default class ProfilesService{
         return axios.post(url, user);
     } 
 
+    updateSettings(user) {
+        const url = `${API_URL}/api/user-account/settings`;
+        return axios.post(url, user);
+    }
+
    getProfiles() {
         console.log("get profiles");
         const url = `${API_URL}/api/profiles/`;
