@@ -11,10 +11,10 @@ class ProfilesSerializer(serializers.ModelSerializer):
            'last_name',
            'phone',
            'email',
-           'alert_stock',
-           'alert_price',
-           'alert_sms',
-           'alert_email',
+           'alert_stock_email',
+           'alert_price_email',
+           'alert_stock_sms',
+           'alert_price_sms'
        )
 
 class RegisterSerializer(serializers.ModelSerializer):

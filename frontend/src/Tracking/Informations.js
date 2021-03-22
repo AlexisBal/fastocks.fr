@@ -7,40 +7,40 @@ export default function Informations() {
     var lastNameString = sessionStorage.getItem('last_name');
     var emailString = sessionStorage.getItem('email');
     var phoneString = sessionStorage.getItem('phone');
-    var alertStockString = sessionStorage.getItem('alert_stock');
-    var alertPriceString = sessionStorage.getItem('alert_price');
-    var alertSmsString = sessionStorage.getItem('alert_sms');
-    var alertEmailString = sessionStorage.getItem('alert_email');
+    var alertStockEmailString = sessionStorage.getItem('alert_stock_email');
+    var alertPriceEmailString = sessionStorage.getItem('alert_price_email');
+    var alertStockSmsString = sessionStorage.getItem('alert_stock_sms');
+    var alertPriceSmsString = sessionStorage.getItem('alert_price_sms');
     if (!idString) {
       idString = localStorage.getItem('id');
       firstNameString = localStorage.getItem('first_name');
       lastNameString = localStorage.getItem('last_name');
       emailString = localStorage.getItem('email');
       phoneString = localStorage.getItem('phone');
-      alertStockString = localStorage.getItem('alert_stock');
-      alertPriceString = localStorage.getItem('alert_price');
-      alertSmsString = localStorage.getItem('alert_sms');
-      alertEmailString = localStorage.getItem('alert_email');
+      alertStockEmailString = localStorage.getItem('alert_stock_email');
+      alertPriceEmailString = localStorage.getItem('alert_price_email');
+      alertStockSmsString = localStorage.getItem('alert_stock_sms');
+      alertPriceEmailString = localStorage.getItem('alert_price_sms');
     }
     const userId = JSON.parse(idString);
     const userFirstName = JSON.parse(firstNameString);
     const userLastName = JSON.parse(lastNameString);
     const userEmail = JSON.parse(emailString);
     const userPhone = JSON.parse(phoneString);
-    const userAlertStock = JSON.parse(alertStockString);
-    const userAlertPrice = JSON.parse(alertPriceString);
-    const userAlertSms = JSON.parse(alertSmsString);
-    const userAlertEmail = JSON.parse(alertEmailString);
+    const userAlertStockEmail = JSON.parse(alertStockEmailString);
+    const userAlertPriceEmail = JSON.parse(alertPriceEmailString);
+    const userAlertStockSms = JSON.parse(alertStockSmsString);
+    const userAlertPriceSms = JSON.parse(alertPriceSmsString);
     return [
       userId?.id, 
       userFirstName?.first_name,
       userLastName?.last_name,
       userEmail?.email,
       userPhone?.phone,
-      userAlertStock?.alert_stock,
-      userAlertPrice?.alert_price,
-      userAlertSms?.alert_sms,
-      userAlertEmail?.alert_email
+      userAlertStockEmail?.alert_stock_email,
+      userAlertPriceEmail?.alert_price_email,
+      userAlertStockSms?.alert_stock_sms,
+      userAlertPriceSms?.alert_price_sms,
     ]
   };
 
@@ -49,10 +49,10 @@ export default function Informations() {
   const [lastName, setLastName] = useState(getInformations()[2]);
   const [email, setEmail] = useState(getInformations()[3]);
   const [phone, setPhone] = useState(getInformations()[4]);
-  const [alertStock, setAlertStock] = useState(getInformations()[5]);
-  const [alertPrice, setAlertPrice] = useState(getInformations()[6]);
-  const [alertSms, setAlertSms] = useState(getInformations()[7]);
-  const [alertEmail, setAlertEmail] = useState(getInformations()[8]);
+  const [alertStockEmail, setAlertStockEmail] = useState(getInformations()[5]);
+  const [alertPriceEmail, setAlertPriceEmail] = useState(getInformations()[6]);
+  const [alertStockSms, setAlertStockSms] = useState(getInformations()[7]);
+  const [alertPriceSms, setAlertPriceSms] = useState(getInformations()[8]);
 
   const saveLocalInformations = userInformations => {
     localStorage.setItem('id', JSON.stringify(userInformations.id));
@@ -60,19 +60,19 @@ export default function Informations() {
     localStorage.setItem('last_name', JSON.stringify(userInformations.last_name));
     localStorage.setItem('email', JSON.stringify(userInformations.email));
     localStorage.setItem('phone', JSON.stringify(userInformations.phone));
-    localStorage.setItem('alert_stock', JSON.stringify(userInformations.alert_stock));
-    localStorage.setItem('alert_price', JSON.stringify(userInformations.alert_price));
-    localStorage.setItem('alert_sms', JSON.stringify(userInformations.alert_sms));
-    localStorage.setItem('alert_email', JSON.stringify(userInformations.alert_email));
+    localStorage.setItem('alert_stock_email', JSON.stringify(userInformations.alert_stock_email));
+    localStorage.setItem('alert_price_email', JSON.stringify(userInformations.alert_price_email));
+    localStorage.setItem('alert_stock_sms', JSON.stringify(userInformations.alert_stock_sms));
+    localStorage.setItem('alert_price_sms', JSON.stringify(userInformations.alert_price_sms));
     setId(userInformations.id.id);
     setFirstName(userInformations.first_name.first_name);
     setLastName(userInformations.last_name.last_name);
     setEmail(userInformations.email.email);
     setPhone(userInformations.phone.phone);
-    setAlertStock(userInformations.alert_stock.alert_stock);
-    setAlertPrice(userInformations.alert_price.alert_price);
-    setAlertSms(userInformations.alert_sms.alert_sms);
-    setAlertEmail(userInformations.alert_email.alert_email);
+    setAlertStockEmail(userInformations.alert_stock_email.alert_stock_email);
+    setAlertPriceEmail(userInformations.alert_price_email.alert_price_email);
+    setAlertStockSms(userInformations.alert_stock_sms.alert_stock_sms);
+    setAlertPriceSms(userInformations.alert_price_sms.alert_price_sms);
   };
 
   const saveSessionInformations = userInformations => {
@@ -81,19 +81,19 @@ export default function Informations() {
     sessionStorage.setItem('last_name', JSON.stringify(userInformations.last_name));
     sessionStorage.setItem('email', JSON.stringify(userInformations.email));
     sessionStorage.setItem('phone', JSON.stringify(userInformations.phone));
-    sessionStorage.setItem('alert_stock', JSON.stringify(userInformations.alert_stock));
-    sessionStorage.setItem('alert_price', JSON.stringify(userInformations.alert_price));
-    sessionStorage.setItem('alert_sms', JSON.stringify(userInformations.alert_sms));
-    sessionStorage.setItem('alert_email', JSON.stringify(userInformations.alert_email));
+    sessionStorage.setItem('alert_stock_email', JSON.stringify(userInformations.alert_stock_email));
+    sessionStorage.setItem('alert_price_email', JSON.stringify(userInformations.alert_price_email));
+    sessionStorage.setItem('alert_stock_sms', JSON.stringify(userInformations.alert_stock_sms));
+    sessionStorage.setItem('alert_price_sms', JSON.stringify(userInformations.alert_price_sms));
     setId(userInformations.id.id);
     setFirstName(userInformations.first_name.first_name);
     setLastName(userInformations.last_name.last_name);
     setEmail(userInformations.email.email);
     setPhone(userInformations.phone.phone);
-    setAlertStock(userInformations.alert_stock.alert_stock);
-    setAlertPrice(userInformations.alert_price.alert_price);
-    setAlertSms(userInformations.alert_sms.alert_sms);
-    setAlertEmail(userInformations.alert_email.alert_email);
+    setAlertStockEmail(userInformations.alert_stock_email.alert_stock_email);
+    setAlertPriceEmail(userInformations.alert_price_email.alert_price_email);
+    setAlertStockSms(userInformations.alert_stock_sms.alert_stock_sms);
+    setAlertPriceSms(userInformations.alert_price_sms.alert_price_sms);
   };
 
   return {
@@ -104,9 +104,9 @@ export default function Informations() {
     lastName,
     email,
     phone,
-    alertStock,
-    alertPrice,
-    alertSms,
-    alertEmail
+    alertStockEmail,
+    alertPriceEmail,
+    alertStockSms,
+    alertPriceSms
   }
 }

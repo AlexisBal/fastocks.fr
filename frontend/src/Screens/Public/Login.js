@@ -51,10 +51,10 @@ function Login() {
             last_name: {last_name: result.data.last_name},
             email: {email: result.data.email},
             phone: {phone: result.data.phone},
-            alert_stock: {alert_stock: result.data.alert_stock},
-            alert_price: {alert_price: result.data.alert_price},
-            alert_sms: {alert_sms: result.data.alert_sms},
-            alert_email: {alert_email: result.data.alert_email}
+            alert_stock_email: {alert_stock_email: result.data.alert_stock_email},
+            alert_price_email: {alert_price_email: result.data.alert_price_email},
+            alert_stock_sms: {alert_stock_sms: result.data.alert_stock_sms},
+            alert_price_sms: {alert_price_sms: result.data.alert_price_sms}
           })
           setSessionInformations({
             id: {id: result.data.id_user},
@@ -62,10 +62,10 @@ function Login() {
             last_name: {last_name: result.data.last_name},
             email: {email: result.data.email},
             phone: {phone: result.data.phone},
-            alert_stock: {alert_stock: result.data.alert_stock},
-            alert_price: {alert_price: result.data.alert_price},
-            alert_sms: {alert_sms: result.data.alert_sms},
-            alert_email: {alert_email: result.data.alert_email}
+            alert_stock_email: {alert_stock_email: result.data.alert_stock_email},
+            alert_price_email: {alert_price_email: result.data.alert_price_email},
+            alert_stock_sms: {alert_stock_sms: result.data.alert_stock_sms},
+            alert_price_sms: {alert_price_sms: result.data.alert_price_sms}
           })
         }
         else {
@@ -76,10 +76,10 @@ function Login() {
             last_name: {last_name: result.data.last_name},
             email: {email: result.data.email},
             phone: {phone: result.data.phone},
-            alert_stock: {alert_stock: result.data.alert_stock},
-            alert_price: {alert_price: result.data.alert_price},
-            alert_sms: {alert_sms: result.data.alert_sms},
-            alert_email: {alert_email: result.data.alert_email}
+            alert_stock_email: {alert_stock_email: result.data.alert_stock_email},
+            alert_price_email: {alert_price_email: result.data.alert_price_email},
+            alert_stock_sms: {alert_stock_sms: result.data.alert_stock_sms},
+            alert_price_sms: {alert_price_sms: result.data.alert_price_sms}
           })
         }
         setLoggedIn(true);

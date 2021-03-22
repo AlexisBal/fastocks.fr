@@ -66,10 +66,10 @@ const PrivateHeader = props => {
       last_name:false,
       email: false,
       phone: false,
-      alert_stock: false,
-      alert_price: false,
-      alert_sms: false,
-      alert_email: false
+      alert_stock_email: false,
+      alert_price_email: false,
+      alert_stock_sms: false,
+      alert_price_sms: false,
     });
 
     setLocalInformations({
@@ -78,10 +78,10 @@ const PrivateHeader = props => {
       last_name:false,
       email: false,
       phone: false,
-      alert_stock: false,
-      alert_price: false,
-      alert_sms: false,
-      alert_email: false
+      alert_stock_email: false,
+      alert_price_email: false,
+      alert_stock_sms: false,
+      alert_price_sms: false,
     })
   }
   
@@ -118,11 +118,11 @@ const PrivateHeaderWithRouter = withRouter(PrivateHeader);
 // App
 function App() {
   const {setLocalToken, setSessionToken, token } = useToken();
-  const {setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertEmail, alertSms, alertPrice, alertStock } = Informations();
+  const {setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertStockEmail, alertPriceEmail, alertPriceSms, alertStockSms } = Informations();
 
   return (
     <div className="Main">
-      <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertEmail, alertSms, alertPrice, alertStock }}>
+      <AuthContext.Provider value={{setLocalToken, setSessionToken, token, setLocalInformations, setSessionInformations, id, email, phone, firstName, lastName, alertStockEmail, alertPriceEmail, alertPriceSms, alertStockSms }}>
         <Router>
           <PublicHeaderWithRouter token={token}/>
           <PrivateHeaderWithRouter token={token} setLocalToken={setLocalToken} setSessionToken={setSessionToken} setLocalInformations={setLocalInformations} setSessionInformations={setSessionInformations}/>

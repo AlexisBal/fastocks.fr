@@ -85,10 +85,10 @@ def user_account_settings(request):
     Nécessite un jeton d'identification !
     {
         "phone": "0695831470",
-        "alert_stock": true,
-        "alert_price": true,
-        "alert_sms": false,
-        "alert_email": false
+        "alert_stock_email": true,
+        "alert_price_email": true,
+       "alert_stock_sms": false,
+        "alert_price_sms": false,
     }
     '''
     try:

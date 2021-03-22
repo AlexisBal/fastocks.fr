@@ -25,8 +25,8 @@ function Register() {
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [isLoggedIn, setLoggedIn] = useState(false);
-    const [errorMail, setErrorMail] = useState(false);
-    const [errorPwd, setErrorPwd] = useState(false);
+    const [errorMail, setErrorMail] = useState(true);
+    const [errorPwd, setErrorPwd] = useState(true);
     const [errorMessageEmail, setErrorMessageEmail] = useState("");
     const [errorMessagePwd, setErrorMessagePwd] = useState("");
     const [show, setShow] = useState(false);
@@ -40,103 +40,103 @@ function Register() {
       e.preventDefault();
       
       // vérification des emails entrées 
-      if (email !== emailConfirm) {
+      if (email === emailConfirm) {
+        setErrorMail(false);
+        // vérification des mots de passe entrés 
+        if (password === passwordConfirm) {
+          if (password.length >= 8) {
+            var x;
+            var y;
+            var checked1 = false;
+            var checked2 = false;
+            const symbols = ['#', '@', '&', '§', '!', '°', '*', '$', '¥', '€', '£', '%', '?', ';', '.', ':', '/', '+', '=', '<', '>', '-', '_', '{', '}', '(', ')', '[', ']']
+            for (x=0;x<10;x++) {
+              if (password.indexOf(x) !== -1) {
+                checked1 = true;
+                break;
+              }
+            }
+            if (!checked1) {
+              let err = <strong className="error">Le mot de passe doit contenir au minimum 1 chiffre !</strong>;
+              setErrorMessagePwd(err);
+              setErrorPwd(true);
+            }
+            for (y in symbols) {
+              if (password.indexOf(symbols[y]) !== -1) {
+                checked2 = true;
+                break;
+              }
+            }
+            if (!checked2) {
+              let err = <strong className="error">Le mot de passe doit contenir au minimum 1 caractère spécial !</strong>;
+              setErrorMessagePwd(err);
+              setErrorPwd(true);
+            }
+            else {
+              setErrorPwd(false);
+
+              // Formatage Date 
+              var jour = birthDate.getDate().toString(); 
+              if (jour.length === 1) {
+                jour = "0" + jour;
+              }
+              var mois = (birthDate.getMonth()+1).toString();
+              if (mois.length === 1) {
+                mois = "0" + mois;
+              }
+              var annee = birthDate.getFullYear().toString(); 
+              const date = annee+'-'+mois+'-'+jour
+
+              // Requete API 
+              profilesService.register({
+                "gender": gender,
+                "birth_date": date,
+                "first_name": firstName,
+                "last_name": lastName,
+                "email": email,
+                "password": password
+              }).then((result)=>{
+                setSessionToken({token: result.data.token});
+                setSessionInformations({
+                  id: {id: result.data.id_user},
+                  first_name: {first_name: result.data.first_name},
+                  last_name: {last_name: result.data.last_name},
+                  email: {email: result.data.email},
+                  phone: {phone: result.data.phone},
+                  alert_stock_email: {alert_stock_email: result.data.alert_stock_email},
+                  alert_price_email: {alert_price_email: result.data.alert_price_email},
+                  alert_stock_sms: {alert_stock_sms: result.data.alert_stock_sms},
+                  alert_price_sms: {alert_price_sms: result.data.alert_price_sms}
+                })
+                setLoggedIn(true);
+              }).catch(()=>{ 
+                setShow(true)
+              });
+            }
+          }
+          else{
+            let err = <strong className="error">Le mot de passe doit contenir au minimum 8 caractères !</strong>;
+            setErrorMessagePwd(err);
+            setErrorPwd(true);
+          }
+        }
+        else {
+          let err = <strong className="error">Les mots de passe saisis sont différents !</strong>;
+          setErrorMessagePwd(err);
+          setErrorPwd(true);
+        }
+      }
+      else {
         let err = <strong className="error">Les adresses email saisies sont différentes !</strong>;
         setErrorMessageEmail(err);
         setErrorMail(true);
       }
-      else {
-        setErrorMail(false);
-      }
 
-      // vérification des mots de passe entrés 
-      if (password !== passwordConfirm) {
-        let err = <strong className="error">Les mots de passe saisis sont différents !</strong>;
-        setErrorMessagePwd(err);
-        setErrorPwd(true);
-      }
-      else {
-        if (password.length < 8) {
-          let err = <strong className="error">Le mot de passe doit contenir au minimum 8 caractères !</strong>;
-          setErrorMessagePwd(err);
-          setErrorPwd(true);
-        }
-        else {
-          var x;
-          var y;
-          var checked1 = false;
-          var checked2 = false;
-          const symbols = ['#', '@', '&', '§', '!', '°', '*', '$', '¥', '€', '£', '%', '?', ';', '.', ':', '/', '+', '=', '<', '>', '-', '_', '{', '}', '(', ')', '[', ']']
-          for (x=0;x<10;x++) {
-            if (password.indexOf(x) !== -1) {
-              checked1 = true;
-              break;
-            }
-          }
-          if (!checked1) {
-            let err = <strong className="error">Le mot de passe doit contenir au minimum 1 chiffre !</strong>;
-            setErrorMessagePwd(err);
-            setErrorPwd(true);
-          }
-          for (y in symbols) {
-            if (password.indexOf(symbols[y]) !== -1) {
-              checked2 = true;
-              setErrorPwd(false);
-              break;
-            }
-          }
-          if (!checked2) {
-            let err = <strong className="error">Le mot de passe doit contenir au minimum 1 caractère spécial !</strong>;
-            setErrorMessagePwd(err);
-            setErrorPwd(true);
-          }
-        }
-      }
       if (!errorPwd) {
         setErrorMessagePwd("");
       }
       if (!errorMail) {
         setErrorMessageEmail("");
-      }
-
-      if (!errorPwd && !errorMail) {
-        // Formatage Date 
-        var jour = birthDate.getDate().toString(); 
-        if (jour.length === 1) {
-          jour = "0" + jour;
-        }
-        var mois = (birthDate.getMonth()+1).toString();
-        if (mois.length === 1) {
-          mois = "0" + mois;
-        }
-        var annee = birthDate.getFullYear().toString(); 
-        const date = annee+'-'+mois+'-'+jour
-
-        // Requete API 
-        profilesService.register({
-          "gender": gender,
-          "birth_date": date,
-          "first_name": firstName,
-          "last_name": lastName,
-          "email": email,
-          "password": password
-        }).then((result)=>{
-          setSessionToken({token: result.data.token});
-          setSessionInformations({
-            id: {id: result.data.id_user},
-            first_name: {first_name: result.data.first_name},
-            last_name: {last_name: result.data.last_name},
-            email: {email: result.data.email},
-            phone: {phone: result.data.phone},
-            alert_stock: {alert_stock: result.data.alert_stock},
-            alert_price: {alert_price: result.data.alert_price},
-            alert_sms: {alert_sms: result.data.alert_sms},
-            alert_email: {alert_email: result.data.alert_email}
-          })
-          setLoggedIn(true);
-        }).catch(()=>{ 
-          setShow(true)
-        });
       }
     }
 
@@ -159,6 +159,8 @@ function Register() {
         return(null)
       }
     }
+
+    var DateMax = new Date();
 
     return (
       <body className="text-center">
@@ -187,6 +189,7 @@ function Register() {
                 locale={"fr"}
                 dateFormat="dd/MM/yyyy"
                 selected={birthDate} 
+                maxDate={DateMax.setDate(DateMax.getDate() - 4380)}
                 
                 onChange={date => setBirthDate(date)}/>
                 <input type="text" id="lastname" className="form-control" placeholder="Nom de famille" required onChange={e => setLastName(e.target.value)}></input>
