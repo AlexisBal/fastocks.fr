@@ -110,7 +110,9 @@ function Register() {
                 })
                 setLoggedIn(true);
               }).catch(()=>{ 
-                setShow(true)
+                let err = <strong className="error">L'adresse mail utilisée existe déjà !</strong>;
+                setErrorMessageEmail(err);
+                setErrorMail(true);
               });
             }
           }
@@ -144,28 +146,11 @@ function Register() {
       return <Redirect to={"/myaccount"} />;
     }
 
-    function AlertDismissible() {
-      if (show) {
-        return (
-          <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-            <Alert.Heading>Oups, il semble qu'il y ait un problème !</Alert.Heading>
-            <p>
-              Un compte existe déjà avec cette adresse email !
-            </p>
-          </Alert>
-        );
-      }
-      else {
-        return(null)
-      }
-    }
-
     var DateMax = new Date();
 
     return (
       <body className="text-center">
         <div className='safe-container'>
-          <AlertDismissible/>
           <main className="form-register">
             <form onSubmit={handleSubmit} >
                 <h1 className="h3 mb-3 fw-normal">Création de votre compte Fastocks</h1>

@@ -87,25 +87,27 @@ def user_account_settings(request):
         "phone": "0695831470",
         "alert_stock_email": true,
         "alert_price_email": true,
-       "alert_stock_sms": false,
+        "alert_stock_sms": false,
         "alert_price_sms": false,
     }
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
-        data = request.data
-        data['email'] = profile.email
-        data['password'] = profile.password
         id_1 = int(profile.id_user)
         id_2 = int(request.META['HTTP_USER_ID'])
-        
+        data = request.data
+        data["email"] = profile.email
+        data["token"] = profile.token 
+        data["id_user"] = profile.id_user
+        data["first_name"] = profile.first_name
+        data["last_name"] = profile.last_name
         if id_1 == id_2:
-            serializer = ProfilesSerializer(profile, data=request.data, context={'request': request})
+            serializer = ProfilesSerializer(profile, data=data, context={'request': request})
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
             else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
+                return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_400_BAD_REQUEST)
        
     except Profile.DoesNotExist:

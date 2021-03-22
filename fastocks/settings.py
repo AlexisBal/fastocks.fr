@@ -82,6 +82,14 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = ('http://localhost:3000',)
 
+CORS_ALLOW_HEADERS = (
+    'content-disposition', 
+    'accept-encoding',
+    'content-type', 
+    'accept',
+    'origin', 
+    'token',
+    'user-id',)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

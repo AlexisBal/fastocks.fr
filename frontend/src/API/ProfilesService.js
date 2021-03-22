@@ -13,9 +13,18 @@ export default class ProfilesService{
         return axios.post(url, user);
     } 
 
-    updateSettings(user) {
+    updateSettings(user, user_id, token) {
         const url = `${API_URL}/api/user-account/settings`;
-        return axios.post(url, user);
+        return axios.put(
+            url, 
+            user, 
+            {
+                headers: {
+                    "User-ID": user_id,
+                    "Token": token,
+                }
+            }
+        );
     }
 
    getProfiles() {

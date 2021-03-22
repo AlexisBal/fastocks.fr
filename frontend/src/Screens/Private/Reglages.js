@@ -1,15 +1,20 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Button, Accordion, Card, useAccordionToggle, InputGroup, FormControl} from 'react-bootstrap';
 import {BsFillBellFill} from "react-icons/bs";
 import { MdPhoneIphone } from "react-icons/md";
 import { IconContext } from "react-icons";
 
+import ProfilesService from  '../../API/ProfilesService'
 import { useAuth } from "../../Tracking/Auth";
+
+
+const profilesService = new ProfilesService();
 
 function Reglages () {
 
   const { token, firstName, lastName, id, phone, email, alertStockEmail, alertPriceEmail, alertPriceSms, alertStockSms, setSessionInformations } = useAuth();
   const phoneInput = useRef();
+  const [errorPhone, setErrorPhone] = useState("");
 
   function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionToggle(eventKey);
@@ -67,7 +72,15 @@ function Reglages () {
     textStockSms = "Alerte stock désactivée";
   }
 
-  const UpdateAlertStockEmail = () => {
+  const handleUpdateSettings = (requete) => {
+    return profilesService.updateSettings(
+      requete,
+      id, 
+      token
+    )
+  }
+
+  const updateAlertStockEmail = () => {
     var alert = false;
     if(!alertStockEmail) {
       alert = true;
@@ -83,9 +96,16 @@ function Reglages () {
       alert_stock_sms: {alert_stock_sms: alertStockSms},
       alert_price_sms: {alert_price_sms: alertPriceSms}
     })
+    handleUpdateSettings({
+      phone: phone,
+      alert_stock_email: alert,
+      alert_price_email: alertPriceEmail,
+      alert_stock_sms: alertStockSms,
+      alert_price_sms: alertPriceSms
+    });
   }
 
-  const UpdateAlertPriceEmail = () => {
+  const updateAlertPriceEmail = () => {
     var alert = false;
     if(!alertPriceEmail) {
       alert = true;
@@ -101,9 +121,16 @@ function Reglages () {
       alert_stock_sms: {alert_stock_sms: alertStockSms},
       alert_price_sms: {alert_price_sms: alertPriceSms}
     })
+    handleUpdateSettings({
+      phone: phone,
+      alert_stock_email: alertStockEmail,
+      alert_price_email: alert,
+      alert_stock_sms: alertStockSms,
+      alert_price_sms: alertPriceSms
+    });
   }
 
-  const UpdateAlertStockSms = () => {
+  const updateAlertStockSms = () => {
     var alert = false;
     if(!alertStockSms) {
       alert = true;
@@ -119,9 +146,16 @@ function Reglages () {
       alert_stock_sms: {alert_stock_sms: alert},
       alert_price_sms: {alert_price_sms: alertPriceSms}
     })
+    handleUpdateSettings({
+      phone: phone,
+      alert_stock_email: alertStockEmail,
+      alert_price_email: alertPriceEmail,
+      alert_stock_sms: alert,
+      alert_price_sms: alertPriceSms
+    });
   }
 
-  const UpdateAlertPriceSms = () => {
+  const updateAlertPriceSms = () => {
     var alert = false;
     if(!alertPriceSms) {
       alert = true;
@@ -137,20 +171,38 @@ function Reglages () {
       alert_stock_sms: {alert_stock_sms: alertStockSms},
       alert_price_sms: {alert_price_sms: alert}
     })
+    handleUpdateSettings({
+      phone: phone,
+      alert_stock_email: alertStockEmail,
+      alert_price_email: alertPriceEmail,
+      alert_stock_sms: alertStockSms,
+      alert_price_sms: alert
+    });
   }
 
-  const UpdatePhone = () => {
-    setSessionInformations({
-      id: {id: id},
-      first_name: {first_name: firstName},
-      last_name: {last_name: lastName},
-      email: {email: email},
-      phone: {phone: phoneInput.current.value},
-      alert_stock_email: {alert_stock_email: alertStockEmail},
-      alert_price_email: {alert_price_email: alertPriceEmail},
-      alert_stock_sms: {alert_stock_sms: alertStockSms},
-      alert_price_sms: {alert_price_sms: alertPriceSms}
-    })
+  const updatePhone = () => {
+    handleUpdateSettings({
+      phone: phoneInput.current.value,
+      alert_stock_email: alertStockEmail,
+      alert_price_email: alertPriceEmail,
+      alert_stock_sms: alertStockSms,
+      alert_price_sms: alertPriceSms
+    }).then((result)=>{
+      setSessionInformations({
+        id: {id: id},
+        first_name: {first_name: firstName},
+        last_name: {last_name: lastName},
+        email: {email: email},
+        phone: {phone: phoneInput.current.value},
+        alert_stock_email: {alert_stock_email: alertStockEmail},
+        alert_price_email: {alert_price_email: alertPriceEmail},
+        alert_stock_sms: {alert_stock_sms: alertStockSms},
+        alert_price_sms: {alert_price_sms: alertPriceSms}
+      })
+    }).catch(()=>{ 
+      let err = <strong className="error">Ce téléphone est déjà utilisé !</strong>;
+      setErrorPhone(err);
+    });
   }
 
   var StatutPhone;
@@ -169,8 +221,8 @@ function Reglages () {
       return (
         <Card.Body autoFocus>
           <h3>Cliquer pour activer ou desactiver une alerte</h3>
-          <Button style={{margin: "20px"}} variant={buttonStockSms} onClick={UpdateAlertStockSms}>{textStockSms}</Button>
-          <Button style={{margin: "20px"}} variant={buttonPriceSms} onClick={UpdateAlertPriceSms}>{textPriceSms}</Button>
+          <Button style={{margin: "20px"}} variant={buttonStockSms} onClick={updateAlertStockSms}>{textStockSms}</Button>
+          <Button style={{margin: "20px"}} variant={buttonPriceSms} onClick={updateAlertPriceSms}>{textPriceSms}</Button>
         </Card.Body>
       );
     }
@@ -184,9 +236,10 @@ function Reglages () {
               ref={phoneInput}
             />
             <InputGroup.Append>
-              <Button variant="outline-success" onClick={UpdatePhone}>Valider</Button>
+              <Button variant="outline-success" onClick={updatePhone}>Valider</Button>
             </InputGroup.Append>
           </InputGroup>
+          {"\n\n\n"} {errorPhone}
         </Card.Body>
       );
     }
@@ -214,8 +267,8 @@ function Reglages () {
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
                   <h3>Cliquer pour activer ou desactiver une alerte</h3>
-                  <Button  style={{margin: "20px"}} variant={buttonStockEmail} onClick={UpdateAlertStockEmail}>{textStockEmail}</Button>
-                  <Button style={{margin: "20px"}} variant={buttonPriceEmail} onClick={UpdateAlertPriceEmail}>{textPriceEmail}</Button>
+                  <Button  style={{margin: "20px"}} variant={buttonStockEmail} onClick={updateAlertStockEmail}>{textStockEmail}</Button>
+                  <Button style={{margin: "20px"}} variant={buttonPriceEmail} onClick={updateAlertPriceEmail}>{textPriceEmail}</Button>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
