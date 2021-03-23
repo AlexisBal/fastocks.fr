@@ -27,6 +27,20 @@ export default class ProfilesService{
         );
     }
 
+    changePassword(user, user_id, token) {
+        const url = `${API_URL}/api/user-account/password`;
+        return axios.post(
+            url, 
+            user, 
+            {
+                headers: {
+                    "User-ID": user_id,
+                    "Token": token,
+                }
+            }
+        );
+    }
+
    getProfiles() {
         console.log("get profiles");
         const url = `${API_URL}/api/profiles/`;

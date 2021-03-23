@@ -218,7 +218,10 @@ h1 {
 .form-change-password #new-password-confirm {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+}
+.form-change-password #button-submit {
+  margin-top: 20px;
 }
 
 code {
