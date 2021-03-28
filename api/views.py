@@ -1,3 +1,4 @@
+from django.db.models.fields import URLField
 from rest_framework.response import Response
 from oauth2_provider.decorators import protected_resource
 from rest_framework.decorators import api_view
@@ -7,6 +8,7 @@ from django.contrib.auth import authenticate as django_authenticate, login as dj
 
 from .models import *
 from .serializers import *
+from .scripts.analyse_url import WebsiteValidation
     
 
 @api_view(['POST', 'GET'])
@@ -155,7 +157,7 @@ def user_account_delete(request):
     '''
     try:
         profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
-        serializer = ProfilesSerializer(profile,context={'request': request})
+        serializer = ProfilesSerializer(profile, context={'request': request})
         id_1 = int(serializer.data['id_user'])
         id_2 = int(request.META['HTTP_USER_ID'])
         if id_1 == id_2:
@@ -242,7 +244,7 @@ def user_account_monitoring_detail(request, pk):
                     "limit": "20"
                 }
                 '''
-                serializer = MonitoringSerializer(monitoring, data=request.data,context={'request': request})
+                serializer = MonitoringSerializer(monitoring, data=request.data, context={'request': request})
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data)
@@ -259,69 +261,50 @@ def user_account_monitoring_detail(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND) 
 
 
-@api_view(['GET'])
-def user_account_monitoring_products(request):
-    try:
-        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
-        id_1 = int(profile.id_user)
-        id_2 = int(request.META['HTTP_USER_ID'])
-        if id_1 == id_2:
-            '''
-            Obtenir un dictionnaire avec les informations des produits suivis.
-            Nécessite un jeton d'identification !
-            '''
-            data = []
-            sku_liste = []
-            try: 
-                monitoring = Monitoring.objects.filter(id_user=id_1)
-            except:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            for x in monitoring:
-                sku_liste.append(x.sku)
-            for x in sku_liste:
-                try: 
-                    product = Products.objects.get(sku=x)
-                    data.append(product)
-                except:
-                    pass
-            serializer = ProductsSerializer(data,context={'request': request}, many=True)
-            return Response({'data': serializer.data})
-        return Response(status=status.HTTP_404_NOT_FOUND)
-   
-    except Profile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def user_new_product_step_1(request):
+    url = request.data["url"]
+    validation = WebsiteValidation(url)
+    if  validation:
+        '''
+        Vérification du lien de suivi entré 
+        '''
+        data = {
+            'url': url,
+            'market_place': validation,
+            'brand': "pass",
+            'name': "pass",
+            'categorie': "pass",
+            'size': "pass",
+            'color': "pass",
+        }
+        serializer = NewMonitoringProductSerializer(data=data)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST) 
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def user_account_monitoring_product(request, pk):
+@api_view(['POST'])
+def user_new_product_step_2(request):
     try:
-        profile = Profile.objects.get(token=request.META['HTTP_TOKEN'])
-        id_1 = int(profile.id_user)
-        id_2 = int(request.META['HTTP_USER_ID'])
-        if id_1 == id_2:
-            '''
-            Obtenir un dictionnaire avec les informations du produit suivi.
-            Nécessite un jeton d'identification !
-            '''
-            sku_liste = []
-            try: 
-                monitoring = Monitoring.objects.filter(id_user=id_1)
-            except:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            for x in monitoring:
-                sku_liste.append(x.sku)
-            try:
-                product = Products.objects.get(pk=pk)
-                if product.sku in sku_liste:
-                    serializer = ProductsSerializer(product,context={'request': request})
-                    return Response(serializer.data)
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            except:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_404_NOT_FOUND)
-   
-    except Profile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        product = Products.objects.get(
+            brand=request.data['brand'],
+            name=request.data['name'],
+            size=request.data['size'],
+            color=request.data['color']
+        )
+        serializer = ProductSerializer(product, context={'request': request})
+        return Response(serializer.data)
+        
+    except Products.DoesNotExist:
+        serializer = ProductSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET'])
@@ -468,6 +451,7 @@ def products_list(request):
         Nécessite une clée d'autorisation !
         {
             "market_place": "hollister",
+            "url": "",
             "brand": "hollister",
             "name": "Sweat ras du cou à logo brodé",
             "categorie": "vetement",

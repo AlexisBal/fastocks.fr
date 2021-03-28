@@ -41,6 +41,22 @@ export default class ProfilesService{
         );
     }
 
+    validateUrl(url_website) {
+        const url = `${API_URL}/api/user-new-product-step-1`;
+        return axios.post(
+            url, 
+            url_website, 
+        );
+    }
+
+    validateProduct(product) {
+        const url = `${API_URL}/api/user-new-product-step-2`;
+        return axios.post(
+            url, 
+            product, 
+        );
+    }
+
    getProfiles() {
         console.log("get profiles");
         const url = `${API_URL}/api/profiles/`;

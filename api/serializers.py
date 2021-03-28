@@ -88,15 +88,32 @@ class ProductSerializer(serializers.ModelSerializer):
    class Meta:
        model = Products
        fields = (
-           'market_place',
-           'brand',
-           'name',
-           'categorie',
-           'size',
-           'color',
-           'request',
-           'stock',
-           'price'
+            'sku',
+            'url',
+            'market_place',
+            'brand',
+            'name',
+            'categorie',
+            'size',
+            'color',
+            'request',
+            'stock',
+            'price',
        )
+
+class NewMonitoringProductSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = Products
+       fields = (
+            'url',
+            'market_place',
+            'brand',
+            'name',
+            'categorie',
+            'size',
+            'color',
+       )
+
+
 
 

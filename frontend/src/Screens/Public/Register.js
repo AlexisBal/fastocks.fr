@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
 import DatePicker, { registerLocale } from  "react-datepicker";
 import fr from 'date-fns/locale/fr';
-import {Alert} from 'react-bootstrap';
 
 import ProfilesService from  '../../API/ProfilesService'
 import { useAuth } from "../../Tracking/Auth";
@@ -29,7 +28,6 @@ function Register() {
     const [errorPwd, setErrorPwd] = useState(true);
     const [errorMessageEmail, setErrorMessageEmail] = useState("");
     const [errorMessagePwd, setErrorMessagePwd] = useState("");
-    const [show, setShow] = useState(false);
     const { setSessionToken, token,  setSessionInformations } = useAuth();
 
     if (token) {

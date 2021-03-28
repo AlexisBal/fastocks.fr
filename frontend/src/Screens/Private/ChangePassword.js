@@ -68,7 +68,7 @@ function ChangePassword () {
               setPwdChanged(true)
             }).catch(()=>{ 
               let err = <strong className="error">Veuillez vérifier le mot de passe actuel entré !</strong>;
-              setErrorMessageNewPwd(err);
+              setErrorMessageOldPwd(err);
             });
           }
         }
@@ -80,7 +80,7 @@ function ChangePassword () {
     }
     else {
       let err = <strong className="error">Les mots de passe saisis sont différents !</strong>;
-      setErrorMessageOldPwd(err);
+      setErrorMessageNewPwd(err);
     }
   }
     

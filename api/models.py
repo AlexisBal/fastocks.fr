@@ -71,6 +71,9 @@ class Products(models.Model):
     sku = models.AutoField(
         verbose_name="sku", primary_key=True, null=False, unique=True
     )
+    url = models.CharField(
+        verbose_name="url", max_length=250, null=False
+    )
     market_place = models.CharField(
         verbose_name="market place", max_length=200, null=False
     )
@@ -79,9 +82,9 @@ class Products(models.Model):
     categorie = models.CharField(verbose_name="categorie", max_length=200, null=False)
     size = models.CharField(verbose_name="size", max_length=200, null=True)
     color = models.CharField(verbose_name="color", max_length=200, null=False)
-    request = models.CharField(verbose_name="request", max_length=200, null=False)
+    request = models.CharField(verbose_name="request", max_length=200, null=True)
     stock = models.BooleanField(verbose_name="stock", default=False)
-    price = models.DecimalField(verbose_name="price", max_digits=16, decimal_places=6)
+    price = models.DecimalField(verbose_name="price", max_digits=16, decimal_places=6, null=True)
     creation_date = models.DateTimeField("Created At", auto_now_add=True)
     update_date = models.DateTimeField("Updated At", auto_now=True)
 
