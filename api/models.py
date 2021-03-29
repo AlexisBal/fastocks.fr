@@ -77,11 +77,11 @@ class Products(models.Model):
     market_place = models.CharField(
         verbose_name="market place", max_length=200, null=False
     )
-    brand = models.CharField(verbose_name="brand", max_length=200, null=False)
+    brand = models.CharField(verbose_name="brand", max_length=200, null=True)
     name = models.CharField(verbose_name="name", max_length=200, null=False)
-    categorie = models.CharField(verbose_name="categorie", max_length=200, null=False)
+    categorie = models.CharField(verbose_name="categorie", max_length=200, null=True)
     size = models.CharField(verbose_name="size", max_length=200, null=True)
-    color = models.CharField(verbose_name="color", max_length=200, null=False)
+    color = models.CharField(verbose_name="color", max_length=200, null=True)
     request = models.CharField(verbose_name="request", max_length=200, null=True)
     stock = models.BooleanField(verbose_name="stock", default=False)
     price = models.DecimalField(verbose_name="price", max_digits=16, decimal_places=6, null=True)

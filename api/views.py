@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate as django_authenticate, login as dj
 
 from .models import *
 from .serializers import *
-from .scripts.analyse_url import WebsiteValidation
+from .scripts.analyse_url import *
     
 
 @api_view(['POST', 'GET'])
@@ -272,16 +272,17 @@ def user_new_product_step_1(request):
         '''
         data = {
             'url': url,
-            'market_place': validation,
-            'brand': "pass",
-            'name': "pass",
-            'categorie': "pass",
-            'size': "pass",
-            'color': "pass",
+            'market_place': validation["market_place"],
+            'brand': validation["brand"],
+            'name': validation["name"],
+            'categorie': validation["categorie"],
+            'size': validation["size"],
+            'color': validation["color"],
         }
         serializer = NewMonitoringProductSerializer(data=data)
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
         return Response(status=status.HTTP_400_BAD_REQUEST) 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
